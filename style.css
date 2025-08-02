@@ -5,3 +5,6 @@
 ul, li {  
     list-style-type: none;  
 }  
+.mul{
+    display: flex;
+}
