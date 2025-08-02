@@ -2,3 +2,6 @@
 *{
     font-family: "Jura", sans-serif;
 }
+ul, li {  
+    list-style-type: none;  
+}  
