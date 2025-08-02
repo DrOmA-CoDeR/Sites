@@ -8,3 +8,6 @@ ul, li {
 .mul{
     display: flex;
 }
+a{
+    text-decoration: none;
+}
