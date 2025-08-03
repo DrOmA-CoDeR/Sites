@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
      
     <meta name="description" content="Игровой проект РЖД путь к морю в Roblox. Управляй поездами и осваивай железнодорожные пути!">
-    <meta name="keywords" content="РЖД, RZD, Roblox, путь к морю, ржд путь к морю, жд в roblox, roblox игра, симулятор поезда">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">7ш
+    <meta name="keywords" content="РЖД, RZD, Roblox, путь к морю, ржд путь к морю, жд в roblox, roblox игра симулятор поезда">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Aman, DrOmA">
 
@@ -25,9 +25,17 @@
     <meta name="twitter:description" content="краткое описание">
     <meta name="twitter:image" content="https://сайт.ru/путь к картинке.jpg">
 
+    <!--Защита-->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Option" content="DENY">
+    <meta http-equiv="X-XSS-Protecttion" content="1; mode=block">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">.
+    <link rel="stylesheet" href="style.css">. 
 </head>
 <body>
     <div class="fullscreen-image">
@@ -43,7 +51,20 @@
         <p>Это второй блок контента, в который плавно перетекает изображение. Здесь вы можете разместить дополнительную информацию, описание вашего продукта или услуги, или любой другой контент.</p>
         <p>Плавный переход создается с помощью градиентной маски в нижней части изображения, которая постепенно становится прозрачной.</p>
     </div>
-<script src="index.js"> </script> 
 
+ <footer>
+    <!--Защита от копирования-->
+    <script>
+    document.addEventListener('copy', (e) => {
+        e.preventDefault();
+        alert('Копирование запрещено!');
+    });
+
+    <!--Защита от открытия в Iframe-->
+    if (window !== top) {
+        top.location.href = location.href;
+    }
+    </script>
+ </footer>
 </body>
 </html>
