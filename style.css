@@ -2,4 +2,91 @@
 *{
     font-family: "Jura", sans-serif;
 }
-
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        .fullscreen-image {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-image: url('https://source.unsplash.com/random/1920x1080');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .fullscreen-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, #ffffff);
+        }
+        
+        .image-content {
+            max-width: 800px;
+            padding: 20px;
+            z-index: 1;
+        }
+        
+        .image-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .image-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+            border: 2px solid white;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .second-block {
+            padding: 100px 20px;
+            background-color: #ffffff;
+            color: #333;
+            text-align: center;
+        }
+        
+        .second-block h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .second-block p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
