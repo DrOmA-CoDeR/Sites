@@ -33,7 +33,6 @@
         .menu li a:hover {
             background-color: #ddd;
             border-bottom: 1px solid #333; /* Эффект подчеркивания при наведении */
-            transform: scale(1.2);
         }
         
         /* Адаптивность для мобильных */
