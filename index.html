@@ -11,15 +11,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-     <header>
-        <div class="menu-container">
+    <div class="menu-container">
         <div class="menu-block">Главная</div>
         <div class="menu-block">О нас</div>
-        <div class="menu-block">Роли</div>
-        <div class="menu-block">Поезда</div>
+        <div class="menu-block">Услуги</div>
+        <div class="menu-block">Портфолио</div>
         <div class="menu-block">Контакты</div>
     </div>
-     </header>
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+     <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-block">Главная</div>
+        <div class="mobile-menu-block">О нас</div>
+        <div class="mobile-menu-block">Услуги</div>
+        <div class="mobile-menu-block">Портфолио</div>
+        <div class="mobile-menu-block">Контакты</div>
+    </div>
+     
     <main>
         <h1> написал </h1> 
         <p><i> написал</i></p>
@@ -27,5 +39,23 @@
     <footer>
 
     </footer>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Закрываем меню при клике на пункт
+        const menuItems = document.querySelectorAll('.mobile-menu-block');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
