@@ -4,16 +4,16 @@
 }
 @keyframes telegram{
     0%{
-        transform: rotate(-30deg);
-    }
-    1%{
-        transform: rotate(-30deg);
+        transform: scale(1);
     }
     50%{
-        transform: rotate(30deg);
+        transform: scale(1.2);
+    }
+    90%{
+        transform: scale(1);
     }
     100%{
-        transform: rotate(-30deg);
+        transform: scale(1);
     }
 }
        * {
