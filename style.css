@@ -4,7 +4,7 @@
 }
 @keyframes telegram{
     0%{
-        transform: rotate(-30 deg);
+        transform: rotate(-30deg);
     }
     50%{
         transform: rotate(30deg);
