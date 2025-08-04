@@ -4,13 +4,13 @@
 }
 @keyframes telegram{
     0%{
-        transform: rotate(-10 deg);
+        transform: rotate(-30 deg);
     }
     50%{
-        transform: rotate(10deg);
+        transform: rotate(30deg);
     }
     100%{
-        transform: rotate(-10deg);
+        transform: rotate(-30deg);
     }
 }
        * {
@@ -102,6 +102,7 @@
             line-height: 1.6;
         }
 .fa-brands{
-    animation: telegram 2s infinite;
-    font-weight: 500;
+    transition: 0.5s;
+    animation: telegram 4s infinite;
+    font-size: 500;
 }
