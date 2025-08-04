@@ -6,6 +6,9 @@
     0%{
         transform: rotate(-30deg);
     }
+    1%{
+        transform: rotate(-30deg);
+    }
     50%{
         transform: rotate(30deg);
     }
