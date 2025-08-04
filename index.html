@@ -79,6 +79,7 @@
             });
 
             <!--Защита от открытия в Iframe-->
+            
             if (window !== top) {
                 top.location.href = location.href;
             }
