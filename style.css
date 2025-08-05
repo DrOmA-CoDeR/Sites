@@ -115,20 +115,20 @@
 
 
 /* Кастомный курсор */
-.custom-cursor {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ff5733;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference; 
-  transition: transform 0.2s ease;
+
+/* Скрываем стандартный курсор */
+html {
+  cursor: none;
 }
 
-
-button:hover ~ .custom-cursor {
-  transform: scale(2);
-  background: #ff5733;
+/* Стилизуем кастомный курсор */
+.custom-cursor {
+  width: 30px;
+  height: 30px;
+  background-image: url('cursor-icon.svg'); /* или любой другой файл */
+  background-size: cover;
+  position: fixed;
+  pointer-events: none; /* чтобы курсор не блокировал клики */
+  z-index: 9999;
+  transform: translate(-50%, -50%); /* центрируем */
 }
