@@ -104,7 +104,7 @@
             margin: 0 auto 30px;
             line-height: 1.6;
         }
-.fa-brands{
+.fa-link{
     transition: 0.5s;
     animation: telegram 4s infinite;
     font-size: 100px;
