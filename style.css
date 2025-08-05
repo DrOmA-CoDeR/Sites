@@ -109,3 +109,6 @@
     animation: telegram 4s infinite;
     font-size: 100px;
 }
+.fs{
+    display: flex;
+}
