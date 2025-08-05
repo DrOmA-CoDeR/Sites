@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Игровой проект РЖД путь к морю в Roblox">
+    <meta name="keywords" content="РЖД, Roblox, путь к морю, симулятор поезда">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РЖД - Путь к морю</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="fullscreen-image">
+        <div class="image-content">
+            <h1>ПУТЬ К МОРЮ</h1>
+            <p>Приветствуем вас!</p>
+            <div class="buttons">
+                <a href="https://www.roblox.com/games/" class="btn" target="_blank">Перейти в Roblox</a>
+                <a href="#" class="btn">Правила игры</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <script>
+            document.addEventListener('copy', (e) => {
+                e.preventDefault();
+                alert('Копирование запрещено!');
+            });
+
+            if (window !== top) {
+                top.location.href = location.href;
+            }
+        </script>
+    </footer>
+</body>
+
+</html>
