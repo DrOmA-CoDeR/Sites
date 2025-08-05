@@ -117,22 +117,14 @@
 }
 
 
-
-/* Кастомный курсор */
-
-/* Скрываем стандартный курсор */
-* {
-  cursor: none;
+body {
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
 }
 
-/* Стилизуем кастомный курсор */
-.custom-cursor {
-  width: 30px;
-  height: 30px;
-  background-image: url('cursor-icon.svg'); /* или любой другой файл */
-  background-size: cover;
-  position: fixed;
-  pointer-events: none; /* чтобы курсор не блокировал клики */
-  z-index: 9999;
-  transform: translate(-50%, -50%); /* центрируем */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
