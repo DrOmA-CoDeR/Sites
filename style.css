@@ -91,6 +91,7 @@
             background-color: #ffffff;
             color: #333;
             text-align: center;
+            width: 800px;
         }
         
         .second-block h2 {
@@ -112,7 +113,9 @@
 .fs{
     display: flex;
     margin: auto;
+    gap: 10px;
 }
+
 
 
 /* Кастомный курсор */
