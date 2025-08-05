@@ -112,3 +112,23 @@
 .fs{
     display: flex;
 }
+
+
+/* Кастомный курсор */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ff5733;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference; 
+  transition: transform 0.2s ease;
+}
+
+
+button:hover ~ .custom-cursor {
+  transform: scale(2);
+  background: #ff5733;
+}
