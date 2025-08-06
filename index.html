@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="description" content="Игровой проект РЖД путь к морю в Roblox. Управляй поездами и осваивай железнодорожные пути!">
-    <meta name="keywords" content="РЖД, RZD, Roblox, путь к морю, ржд путь к морю, жд в roblox, roblox игра симулятор поезда">
+    <meta name="description"
+        content="Игровой проект РЖД путь к морю в Roblox. Управляй поездами и осваивай железнодорожные пути!">
+    <meta name="keywords"
+        content="РЖД, RZD, Roblox, путь к морю, ржд путь к морю, жд в roblox, roblox игра симулятор поезда">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Aman, DrOmA">
@@ -21,7 +23,7 @@
     <meta property="og.locale" content="ru_RU>
 
     <!--Для Twitter-->
-    <meta name="twitter.cart" content="summary_large_image">
+    <meta name=" twitter.cart" content="summary_large_image">
     <meta name="twitter:title" content="название страницы">
     <meta name="twitter:description" content="краткое описание">
     <meta name="twitter:image" content="https://сайт.ru/путь к картинке.jpg">
@@ -48,17 +50,17 @@
         <div class="image-content">
             <h1>РЖД ПУТЬ К МОРЮ</h1>
             <p>Лучший ЖД симулятор</p>
-            <a href="Playing now.html"  class="btn">Играть сейчас!</a>
+            <a href="Playing now.html" class="btn">Играть сейчас!</a>
         </div>
     </div>
 
     <div class="second-block">
         <h2>Второй блоsыessкs</h2>
         <div class="fs">
-        <div class="card">
-          <i class="fa-solid fa-link fa-3x"></i>
-          <h3>Играть сейчас</h3>
-             <h4>Жми и веди поезд к морю!</h4>
+            <div class="card">
+                <i class="fa-solid fa-link fa-3x"></i>
+                <h3>Играть сейчас</h3>
+                <h4>Жми и веди поезд к морю!</h4>
             </div>
             <div class="card">
                 <i class="fa-solid fa-bolt fa-3x"></i>
@@ -68,14 +70,14 @@
             <div class="card">
                 <i class="fa-solid fa-user-tie fa-3x"></i>
                 <h3>Для администрации</h3>
-                 <h4>Не тыкай</h4>
+                <h4>Не тыкай</h4>
             </div>
         </div>
         <div class="fs">
             <div class="card">
-             <i class="fa-solid fa-train-subway fa-3x"></i>
-             <h3>Подвижной состав сервера</h3>
-             <h4>Скоро...</h4>
+                <i class="fa-solid fa-train-subway fa-3x"></i>
+                <h3>Подвижной состав сервера</h3>
+                <h4>Скоро...</h4>
             </div>
             <div class="card">
                 <i class="fa-solid fa-id-badge fa-3x"></i>
@@ -85,10 +87,29 @@
             <div class="card">
                 <i class="fa-solid fa-code fa-3x"></i>
                 <h3>Предложения для разработки</h3>
-                 <h4>Скоро...</h4>
+                <h4>Скоро...</h4>
             </div>
         </div>
     </div>
+
+
+
+
+    <!-- Админ-панель -->
+    <div class="admin-overlay" id="adminOverlay">
+        <div class="admin-panel">
+            <button class="close-btn" id="closeAdminPanel">×</button>
+            <h2>Вход для администрации</h2>
+            <input type="text" id="adminLogin" placeholder="Логин">
+            <input type="password" id="adminPassword" placeholder="Пароль">
+            <button id="adminSubmit">Войти</button>
+            <div class="error-message" id="adminErrorMessage">Неверные данные!</div>
+        </div>
+    </div>
+    </div>
+
+    <!--Подключение JS-->
+    <script src="script.js"></script>
 
     <footer>
         <!--Защита от копирования-->
@@ -106,25 +127,6 @@
         </script>
     </footer>
 
-
-       <!-- Админ-панель -->
-  <div class="admin-overlay" id="adminOverlay">
-    <div class="admin-panel">
-        <button class="close-btn" id="closeAdminPanel">×</button>
-        <h2>Вход для администрации</h2>
-        <input type="text" id="adminLogin" placeholder="Логин">
-        <input type="password" id="adminPassword" placeholder="Пароль">
-        <button id="adminSubmit">Войти</button>
-        <div class="error-message" id="adminErrorMessage">Неверные данные!</div>
-    </div>
-    </div>
-    </div>
-
-     <!--Подключение JS-->
-     <script src="script.js"></script>
-
-
-       
 </body>
 
 </html>
