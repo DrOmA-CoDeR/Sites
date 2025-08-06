@@ -65,9 +65,25 @@ body {
     font-weight: bold;
 }
 
+/* Серая кнопка "Перейти в Roblox" */
+.btn-roblox {
+    background-color: gray !important;
+    border-color: gray !important;
+}
+
 .btn:hover {
     background-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-3px);
+}
+
+/* Светло-голубой фон для правил (если у вас есть блок с правилами) */
+.rules {
+    background-color: lightblue;
+    color: black; /* Чтобы текст был читаемым */
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
 }
 
 .fullscreen-image::after {
@@ -80,5 +96,28 @@ body {
     background: linear-gradient(to bottom, transparent, #000000);
 }
 
+/* Адаптация под мобильные устройства */
+@media (max-width: 768px) {
+    .image-content h1 {
+        font-size: 2.5rem; /* Уменьшаем заголовок */
+    }
 
+    .image-content p {
+        font-size: 1.2rem; /* Уменьшаем текст */
+    }
 
+    .buttons {
+        flex-direction: column; /* Кнопки в столбик */
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 12px 25px; /* Уменьшаем кнопки */
+        font-size: 1rem;
+    }
+
+    .rules {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+}
