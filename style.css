@@ -140,7 +140,7 @@
     margin: auto;
     gap: 50px;
 }
-.fa-gamepad{
+.fa-bolt{
     transition: 0.5s;
     animation: playnow 8s infinite;
 }
@@ -149,10 +149,7 @@
         font-size: small;
     }
 }
-.fa-bolt{
-    transition: 0.5s;
-    animation: playnow 8s infinite;
-}
+
 /* Стили админ-панели */
 .admin-overlay {
     display: none;
