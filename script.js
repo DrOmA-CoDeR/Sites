@@ -3,6 +3,31 @@ const ADMIN_CREDENTIALS = {
     login: "admin",
     password: "rzd2023"
 };
+const CORRECT_HASH = "953464d46c87000ee76e7f6941f88fca"; // Хеш от пароля "123"
+async function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  
+  // Хешируем введённый пароль
+  const inputHash = await hashPassword(input);
+  
+  // Сравниваем с правильным хешем
+  if (inputHash === CORRECT_HASH) {
+    alert("Доступ разрешён!");
+    // Здесь можно перенаправить на защищённую страницу
+  } else {
+    alert("Неверный пароль!");
+  }
+}
+
+// Функция для хеширования (SHA-256)
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
 
 // Элементы
 const adminOverlay = document.getElementById('adminOverlay');
@@ -52,3 +77,6 @@ document.addEventListener('keydown', function(e) {
         closeAdminPanel();
     }
 });
+
+
+
