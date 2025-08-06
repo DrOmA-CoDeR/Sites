@@ -112,7 +112,7 @@
 .fs{
     display: flex;
     margin: auto;
-    gap: 10px;
+    gap: 50px;
 }
 @media (max-width: 768px){
     .image-content{
