@@ -114,4 +114,8 @@
     margin: auto;
     gap: 10px;
 }
-
+@media (max-width: 768px){
+    .image-content{
+        font-size: small;
+    }
+}
