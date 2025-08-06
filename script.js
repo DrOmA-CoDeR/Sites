@@ -29,11 +29,11 @@ document.getElementById('adminLoginForm').addEventListener('submit', function(e)
     sessionStorage.setItem('adminAttempts', attempts.toString());
     
     if(attempts >= 2) {
-      alert('Неверные данные! Доступ заблокирован.');
+      alert('⚠️ Неверные данные! Доступ заблокирован.');
       document.getElementById('adminModal').style.display = 'none';
       sessionStorage.removeItem('adminAttempts');
     } else {
-      alert('Неверный логин или пароль! Осталось попыток: ' + (2 - attempts));
+      alert('❌ Неверный логин или пароль! Осталось попыток: ' + (2 - attempts));
     }
   }
 });
