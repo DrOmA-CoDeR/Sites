@@ -3,7 +3,7 @@ const ADMIN_CREDENTIALS = {
     login: "admin",
     password: "rzd2023"
 };
-const CORRECT_HASH = "953464d46c87000ee76e7f6941f88fca"; // Хеш от пароля "123"
+const CORRECT_HASH = "e0803a3b28162b1776c24fd4d5ac2cbc2f34cbcf179581bbafb4082bcb011103"; // Хеш от пароля "123"
 async function checkPassword() {
   const input = document.getElementById("passwordInput").value;
   
