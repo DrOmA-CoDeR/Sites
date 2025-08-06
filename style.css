@@ -16,6 +16,26 @@
         transform: scale(1);
     }
 }
+@keyframes playnow {
+    0%{
+        transform: rotate(0deg);
+    }
+    20%{
+        transform: rotate(15deg);
+    }
+    40%{
+        transform: rotate(-15deg);
+    }
+    60%{
+        transform: rotate(15deg);
+    }
+    80%{
+        transform: rotate(-15deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
+}
        * {
             margin: 0;
             padding: 0;
@@ -113,6 +133,10 @@
     display: flex;
     margin: auto;
     gap: 50px;
+}
+.fa-gamepad{
+    transition: 0.5s;
+    animation: playnow 8s infinite;
 }
 @media (max-width: 768px){
     .image-content{
