@@ -1,4 +1,4 @@
-// Инициализация Firebase (ЗАМЕНИТЕ НА ВАШИ ДАННЫЕ)
+// Инициализация Firebase 
 const firebaseConfig = {
   apiKey: "AIzaSyBM2aPWnY9zTYT31_uyxFLKjZuQAbFWdQ8",
   authDomain: "admins-c5c94.firebaseapp.com",
