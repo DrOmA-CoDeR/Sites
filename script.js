@@ -1,41 +1,54 @@
-// Обработка админ-панели
-document.addEventListener('DOMContentLoaded', function() {
-    // Правильные учетные данные 
-    const ADMIN_CREDENTIALS = {
-        login: "admin",
-        password: "rzd2023"
-    };
+// Конфигурация администратора
+const ADMIN_CREDENTIALS = {
+    login: "admin",
+    password: "rzd2023"
+};
 
-    /
-    const adminPanel = document.querySelector('.admin-panel');
-    const adminLoginBtn = document.querySelector('.fa-user-tie').closest('.card');
-    const adminSubmitBtn = document.getElementById('admin-submit');
-    const errorMessage = document.querySelector('.error-message');
+// Элементы
+const adminOverlay = document.getElementById('adminOverlay');
+const adminLoginBtn = document.querySelector('.fa-user-tie').closest('.card');
+const adminSubmitBtn = document.getElementById('adminSubmit');
+const closeBtn = document.getElementById('closeAdminPanel');
+const errorMessage = document.getElementById('adminErrorMessage');
 
-    /
-    adminLoginBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        adminPanel.style.display = 'block';
-    });
+// Открытие панели
+adminLoginBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    adminOverlay.style.display = 'flex';
+    document.getElementById('adminLogin').focus();
+});
 
-   
-    adminSubmitBtn.addEventListener('click', function() {
-        const login = document.getElementById('admin-login').value;
-        const password = document.getElementById('admin-password').value;
-        
-        if (login === ADMIN_CREDENTIALS.login && password === ADMIN_CREDENTIALS.password) {
-            window.location.href = "Admins.html";
-        } else {
-            errorMessage.style.display = 'block';
-        }
-    });
+// Закрытие панели
+closeBtn.addEventListener('click', closeAdminPanel);
+adminOverlay.addEventListener('click', function(e) {
+    if (e.target === adminOverlay) {
+        closeAdminPanel();
+    }
+});
 
-    // Закрытие панели при клике вне ее
-    document.addEventListener('click', function(e) {
-        if (e.target === adminPanel || adminPanel.contains(e.target)) return;
-        if (e.target === adminLoginBtn || adminLoginBtn.contains(e.target)) return;
-        
-        adminPanel.style.display = 'none';
-        errorMessage.style.display = 'none';
-    });
+// Проверка входа
+adminSubmitBtn.addEventListener('click', function() {
+    const login = document.getElementById('adminLogin').value;
+    const password = document.getElementById('adminPassword').value;
+    
+    if (login === ADMIN_CREDENTIALS.login && password === ADMIN_CREDENTIALS.password) {
+        window.location.href = "Admins.html";
+    } else {
+        errorMessage.style.display = 'block';
+    }
+});
+
+// Функция закрытия
+function closeAdminPanel() {
+    adminOverlay.style.display = 'none';
+    errorMessage.style.display = 'none';
+    document.getElementById('adminLogin').value = '';
+    document.getElementById('adminPassword').value = '';
+}
+
+// Закрытие по ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && adminOverlay.style.display === 'flex') {
+        closeAdminPanel();
+    }
 });

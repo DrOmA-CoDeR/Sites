@@ -107,14 +107,17 @@
     </footer>
 
 
-
-      <!-- Админ-панель -->
+       <!-- Админ-панель -->
+  <div class="admin-overlay" id="adminOverlay">
     <div class="admin-panel">
-    <h2>Вход для администрации</h2>
-    <input type="text" id="admin-login" placeholder="Логин">
-    <input type="password" id="admin-password" placeholder="Пароль">
-    <button id="admin-submit">Войти</button>
-    <div class="error-message">Неверные данные!</div>
+        <button class="close-btn" id="closeAdminPanel">×</button>
+        <h2>Вход для администрации</h2>
+        <input type="text" id="adminLogin" placeholder="Логин">
+        <input type="password" id="adminPassword" placeholder="Пароль">
+        <button id="adminSubmit">Войти</button>
+        <div class="error-message" id="adminErrorMessage">Неверные данные!</div>
+    </div>
+    </div>
     </div>
 
      <!--Подключение JS-->
