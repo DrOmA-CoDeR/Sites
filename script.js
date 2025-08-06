@@ -1,23 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Плавное появление страницы при загрузке
-    document.body.classList.add('fade-in');
-
-    // Плавный переход при клике на ссылки
-    const links = document.querySelectorAll('a:not([target="_blank"])'); // Все ссылки, кроме открывающихся в новой вкладке
+    const links = document.querySelectorAll('.transition-link');
+    const overlay = document.querySelector('.transition-overlay');
     
     links.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const href = link.getAttribute('href');
             
-            // Плавное исчезновение
-            document.body.classList.remove('fade-in');
-            document.body.classList.add('fade-out');
+            // Запускаем анимацию перехода
+            overlay.style.opacity = '1';
             
-            // Переход после анимации
+            // Переход после 0.6 секунд (как в CSS)
             setTimeout(() => {
                 window.location.href = href;
-            }, 500); // 0.5s = время анимации
+            }, 600);
         });
     });
+    
+    // Плавное появление страницы при загрузке
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 50);
 });

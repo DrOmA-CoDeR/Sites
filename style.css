@@ -116,26 +116,21 @@
 }
 
 /* Анимация перехода */
-.fade-in {
-    animation: fadeIn 0.5s ease-in-out;
+.transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
 }
 
-.fade-out {
-    animation: fadeOut 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-/* Чтобы body не прыгал при загрузке */
+/* Плавное появление страницы */
 body {
-    opacity: 1;
-    transition: opacity 0.5s ease;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
