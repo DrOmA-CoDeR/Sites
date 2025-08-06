@@ -35,16 +35,34 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
 
+      <!-- Подключение Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <script>
+        // ИНИЦИАЛИЗАЦИЯ FIREBASE ДОЛЖНА БЫТЬ ЗДЕСЬ!
+        const firebaseConfig = {
+            apiKey: "AIzaSyBM2aPWnY9zTYT31_uyxFLKjZuQAbFWdQ8",
+            authDomain: "admins-c5c94.firebaseapp.com",
+            projectId: "admins-c5c94",
+            storageBucket: "admins-c5c94.firebasestorage.app",
+            messagingSenderId: "279553104900",
+            appId: "1:279553104900:web:b72a26d0227326c8042951"
+        };
+        
+        // Инициализируем Firebase сразу
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+        }
+    </script>
 
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
         integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!-- <head> -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+        crossorigin="anonymous" referrerpolicy="no-referrer" /link>
 
 </head>
 
@@ -70,11 +88,18 @@
                 <h3>Последние новости</h3>
                 <h4>Будь в курсе актуаных новостей сервера.</h4>
             </div>
-            <div class="card">
-                <i class="fa-solid fa-user-tie fa-3x"></i>
-                <h3>Для администрации</h3>
-                <h4>Не тыкай</h4>
-            </div>
+            <!-- Карточка администрации с вызовом функции -->
+    <div class="card" onclick="openAdminPanel()">
+        <i class="fa-solid fa-user-tie fa-3x"></i>
+        <h3>Для администрации</h3>
+        <h4>Не тыкай</h4>
+    </div>
+    
+       <!-- Админ-панель -->
+    <div class="admin-overlay" id="adminOverlay">
+        <!-- ... содержимое панели ... -->
+    </div>
+
         </div>
         <div class="fs">
             <div class="card">
@@ -95,21 +120,7 @@
         </div>
     </div>
 
-              <!--</body> -->
-    <div class="admin-overlay" id="adminOverlay">
-    <div class="admin-panel">
-    <button class="close-btn" id="closeAdminPanel">&times;</button>
-    <h2><i class="fas fa-lock"></i> Вход для администрации</h2>
-    <div class="input-group">
-      <input type="email" id="adminEmail" placeholder="Email" required>
-    </div>
-    <div class="input-group">
-      <input type="password" id="adminPassword" placeholder="Пароль" required>
-    </div>
-    <button id="adminLoginBtn" class="btn-login">Войти</button>
-    <div id="loginError" class="error-message"></div>
-    </div>
-    </div>
+    
 
 </body>
 
