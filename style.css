@@ -19,21 +19,27 @@
 @keyframes playnow {
     0%{
         transform: rotate(0deg);
+        transform: scale(1);
     }
     20%{
         transform: rotate(15deg);
+        transform: scale(1.3);
     }
     40%{
         transform: rotate(-15deg);
+        transform: scale(0.7);
     }
     60%{
         transform: rotate(15deg);
+        transform: scale(1.3);
     }
     80%{
         transform: rotate(-15deg);
+        transform: scale(0.7);
     }
     100%{
         transform: rotate(0deg);
+        transform: scale(1);
     }
 }
        * {
@@ -143,7 +149,10 @@
         font-size: small;
     }
 }
-
+.fa-bolt{
+    transition: 0.5s;
+    animation: playnow 8s infinite;
+}
 /* Стили админ-панели */
 .admin-overlay {
     display: none;
