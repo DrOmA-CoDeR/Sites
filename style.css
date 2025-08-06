@@ -115,33 +115,3 @@
     gap: 10px;
 }
 
-/* Основа для сложной анимации */
-.transition-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    z-index: 10000;
-    opacity: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-/* Частицы */
-.particles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white"/></svg>') repeat;
-    opacity: 0;
-}
-
-/* Осколки страницы */
-.shard {
-    position: absolute;
-    background: white;
-    opacity: 0;
-    transform: rotate(0deg) scale(1);
-}
