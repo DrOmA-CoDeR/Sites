@@ -150,7 +150,6 @@
     }
 }
 
-
 /* Стили для модального окна администрации */
 .admin-modal {
   display: none;
@@ -160,31 +159,43 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
 }
 
 .admin-modal-content {
-  background-color: #0a2e1a;
+  background-color: #1a1a2e;
   margin: 10% auto;
-  padding: 25px;
-  border: 1px solid #1a5b2c;
-  border-radius: 15px;
-  width: 350px;
+  padding: 30px;
+  border: 2px solid #4a4a8a;
+  border-radius: 10px;
+  width: 380px;
   max-width: 90%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  color: #d1f7e3;
+  box-shadow: 0 0 25px rgba(74, 74, 138, 0.6);
+  color: #e6e6ff;
+  position: relative;
+}
+
+.admin-modal-content h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #a3a3ff;
+  font-size: 1.5rem;
 }
 
 .admin-close {
-  color: #d1f7e3;
-  float: right;
+  color: #a3a3ff;
+  position: absolute;
+  right: 20px;
+  top: 15px;
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+  transition: color 0.3s;
 }
 
 .admin-close:hover {
-  color: #fff;
+  color: #ff4d4d;
 }
 
 .admin-input-group {
@@ -194,32 +205,57 @@
 .admin-input-group label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 500;
+  color: #c7c7ff;
+}
+
+.admin-input-group label i {
+  margin-right: 8px;
+  width: 20px;
+  text-align: center;
 }
 
 .admin-input-group input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #1a5b2c;
-  border-radius: 8px;
-  background-color: #0f3a21;
-  color: #fff;
+  padding: 12px 15px;
+  border: 1px solid #4a4a8a;
+  border-radius: 6px;
+  background-color: #2a2a4a;
+  color: #ffffff;
   font-size: 16px;
+  transition: all 0.3s;
+}
+
+.admin-input-group input:focus {
+  border-color: #6a6aff;
+  box-shadow: 0 0 8px rgba(106, 106, 255, 0.4);
+  outline: none;
 }
 
 .admin-submit-btn {
   width: 100%;
-  padding: 12px;
-  background-color: #1a5b2c;
+  padding: 14px;
+  background-color: #4a4a8a;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  transition: all 0.3s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .admin-submit-btn:hover {
-  background-color: #247a3d;
+  background-color: #6a6aff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(106, 106, 255, 0.4);
+}
+
+.admin-submit-btn i {
+  font-size: 0.9em;
 }
