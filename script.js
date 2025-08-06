@@ -1,24 +1,24 @@
 // Обработка админ-панели
 document.addEventListener('DOMContentLoaded', function() {
-    // Правильные учетные данные (измените на свои)
+    // Правильные учетные данные 
     const ADMIN_CREDENTIALS = {
         login: "admin",
         password: "rzd2023"
     };
 
-    // Элементы
+    /
     const adminPanel = document.querySelector('.admin-panel');
     const adminLoginBtn = document.querySelector('.fa-user-tie').closest('.card');
     const adminSubmitBtn = document.getElementById('admin-submit');
     const errorMessage = document.querySelector('.error-message');
 
-    // Открытие панели при клике на "Для администрации"
+    /
     adminLoginBtn.addEventListener('click', function(e) {
         e.preventDefault();
         adminPanel.style.display = 'block';
     });
 
-    // Проверка логина/пароля
+   
     adminSubmitBtn.addEventListener('click', function() {
         const login = document.getElementById('admin-login').value;
         const password = document.getElementById('admin-password').value;
