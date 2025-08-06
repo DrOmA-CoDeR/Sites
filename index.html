@@ -100,8 +100,8 @@
         <div class="admin-panel">
             <button class="close-btn" id="closeAdminPanel">×</button>
             <h2>Вход для администрации</h2>
-            <input type="text" id="adminLogin" placeholder="Логин">
-            <input type="password" id="adminPassword" placeholder="Пароль">
+            <input type="text" id="loginInput" placeholder="Логин">
+            <input type="password" id="passwordInput" placeholder="Пароль">
             <button id="adminSubmit">Войти</button>
             <div class="error-message" id="adminErrorMessage">Неверные данные!</div>
         </div>
@@ -123,6 +123,50 @@
 
             if (window !== top) {
                 top.location.href = location.href;
+            }
+            // Проверяем, есть ли сохраненные учетные данные
+            const savedCredentials = localStorage.getItem('authCredentials');
+
+            function checkAuth() {
+                const login = document.getElementById('loginInput').value;
+                const password = document.getElementById('passwordInput').value;
+
+                // Если учетные данные еще не заданы, сохраняем их
+                if (!savedCredentials) {
+                    const hashedLogin = hashString(login);
+                    const hashedPassword = hashString(password);
+
+                    localStorage.setItem('authCredentials', JSON.stringify({
+                        login: hashedLogin,
+                        password: hashedPassword
+                    }));
+
+                    alert("Учетные данные администратора сохранены!");
+                    return;
+                }
+
+                // Если данные уже есть - проверяем
+                const storedData = JSON.parse(savedCredentials);
+                const inputLoginHash = hashString(login);
+                const inputPasswordHash = hashString(password);
+
+                if (inputLoginHash === storedData.login && inputPasswordHash === storedData.password) {
+                    alert("Доступ разрешен! Добро пожаловать, " + login);
+                    // Здесь можно перенаправить на защищенную страницу
+                } else {
+                    alert("Неверный логин или пароль!");
+                }
+            }
+
+            // Улучшенная хеш-функция (можно заменить на bcrypt.js в реальных проектах)
+            function hashString(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash |= 0; // Преобразуем в 32-битное целое
+                }
+                return hash.toString();
             }
         </script>
     </footer>
