@@ -42,6 +42,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
         integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- <head> -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 </head>
 
@@ -94,19 +97,6 @@
 
 
 
-
-    <!-- Админ-панель -->
-    <div class="admin-overlay" id="adminOverlay">
-        <div class="admin-panel">
-            <button class="close-btn" id="closeAdminPanel">×</button>
-            <h2>Вход для администрации</h2>
-            <input type="password" id="passwordInput" placeholder="Введите ssпароль">
-            <button onclick="checkPassword()">Войти</button>
-            <div class="error-message" id="adminErrorMessage">Неверные данные!</div>
-        </div>
-    </div>
-    </div>
-
     <!--Подключение JS-->
     <script src="script.js"></script>
 
@@ -123,53 +113,8 @@
             if (window !== top) {
                 top.location.href = location.href;
             }
-            // Проверяем, есть ли сохраненные учетные данные
-            const savedCredentials = localStorage.getItem('authCredentials');
-
-            function checkAuth() {
-                const login = document.getElementById('loginInput').value;
-                const password = document.getElementById('passwordInput').value;
-
-                // Если учетные данные еще не заданы, сохраняем их
-                if (!savedCredentials) {
-                    const hashedLogin = hashString(login);
-                    const hashedPassword = hashString(password);
-
-                    localStorage.setItem('authCredentials', JSON.stringify({
-                        login: hashedLogin,
-                        password: hashedPassword
-                    }));
-
-                    alert("Учетные данные администратора сохранены!");
-                    return;
-                }
-
-                // Если данные уже есть - проверяем
-                const storedData = JSON.parse(savedCredentials);
-                const inputLoginHash = hashString(login);
-                const inputPasswordHash = hashString(password);
-
-                if (inputLoginHash === storedData.login && inputPasswordHash === storedData.password) {
-                    alert("Доступ разрешен! Добро пожаловать, " + login);
-                    // Здесь можно перенаправить на защищенную страницу
-                } else {
-                    alert("Неверный логин или пароль!");
-                }
-            }
-
-            // Улучшенная хеш-функция (можно заменить на bcrypt.js в реальных проектах)
-            function hashString(str) {
-                let hash = 0;
-                for (let i = 0; i < str.length; i++) {
-                    const char = str.charCodeAt(i);
-                    hash = (hash << 5) - hash + char;
-                    hash |= 0; // Преобразуем в 32-битное целое
-                }
-                return hash.toString();
-            }
         </script>
     </footer>
-
 </body>
 
 </html>
