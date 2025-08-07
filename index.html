@@ -114,21 +114,23 @@
         </div>
     </div>
 
-<!-- Модальное окно для администрации -->
-<div id="adminModal" class="admin-modal">
-  <div class="admin-modal-content">
-    <span class="admin-close">&times;</span>
-    <h2>Вход для администрации</h2>
-    <form id="adminLoginForm">
-      <div class="admin-input-group">
-        <label for="adminUsername">Логин:</label>
-        <input type="text" id="adminUsername" required>
+<!-- Модальное окно для администрации (замаскированное) -->
+<div id="hiddenAuthPanel" style="display:none;">
+  <div class="access-container" id="secretAccessForm">
+    <span class="close-auth" onclick="hideAuth()">&#10006;</span>
+    <h2><i class="fas fa-shield-alt"></i> Системный доступ</h2>
+    <form onsubmit="return checkSystemAccess()">
+      <div class="access-field">
+        <label><i class="fas fa-user-cog"></i> Идентификатор:</label>
+        <input type="text" id="sysAccessId" autocomplete="off" spellcheck="false">
       </div>
-      <div class="admin-input-group">
-        <label for="adminPassword">Пароль:</label>
-        <input type="password" id="adminPassword" required>
+      <div class="access-field">
+        <label><i class="fas fa-lock"></i> Код доступа:</label>
+        <input type="password" id="sysAccessCode" autocomplete="off">
       </div>
-      <button type="submit" class="admin-submit-btn">Войти</button>
+      <button type="submit" class="access-btn">
+        <i class="fas fa-sign-in-alt"></i> Подтвердить
+      </button>
     </form>
   </div>
 </div>
