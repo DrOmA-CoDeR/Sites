@@ -41,22 +41,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     
-    <script>
-        // ИНИЦИАЛИЗАЦИЯ FIREBASE ДОЛЖНА БЫТЬ ЗДЕСЬ!
-        const firebaseConfig = {
-            apiKey: "AIzaSyBM2aPWnY9zTYT31_uyxFLKjZuQAbFWdQ8",
-            authDomain: "admins-c5c94.firebaseapp.com",
-            projectId: "admins-c5c94",
-            storageBucket: "admins-c5c94.firebasestorage.app",
-            messagingSenderId: "279553104900",
-            appId: "1:279553104900:web:b72a26d0227326c8042951"
-        };
-        
-        // Инициализируем Firebase сразу
-        if (typeof firebase !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
-        }
-    </script>
 
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
@@ -113,27 +97,6 @@
             </div>
         </div>
     </div>
-
-<!-- Модальное окно для администрации (замаскированное) -->
-<div id="hiddenAuthPanel" style="display:none;">
-  <div class="access-container" id="secretAccessForm">
-    <span class="close-auth" onclick="hideAuth()">&#10006;</span>
-    <h2><i class="fas fa-shield-alt"></i> Системный доступ</h2>
-    <form onsubmit="return checkSystemAccess()">
-      <div class="access-field">
-        <label><i class="fas fa-user-cog"></i> Идентификатор:</label>
-        <input type="text" id="sysAccessId" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="access-field">
-        <label><i class="fas fa-lock"></i> Код доступа:</label>
-        <input type="password" id="sysAccessCode" autocomplete="off">
-      </div>
-      <button type="submit" class="access-btn">
-        <i class="fas fa-sign-in-alt"></i> Подтвердить
-      </button>
-    </form>
-  </div>
-</div>
 
 </body>
 
