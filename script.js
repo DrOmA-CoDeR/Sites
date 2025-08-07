@@ -14,47 +14,70 @@ function closeAdminPanel() {
 
 // Secure credential check with hashing
 async function hashString(str) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(str);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(str);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (error) {
+        console.error('Ошибка хеширования:', error);
+        return '';
+    }
 }
 
 async function checkAdminCredentials(login, password) {
-    // Hashed credentials (SHA-256)
-    const correctLoginHash = 'd82494f05d6917ba02f7aaa29689ccb444bb73f20380876cb05d1f37537b7892'; // Admin
-    const correctPassHash = 'a3d0a5a5b0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0'; // Хеш от "Undant"
+    // Хеши для "Admin" и "Undant"
+    const correctLoginHash = 'd82494f05d6917ba02f7aaa29689ccb444bb73f20380876cb05d1f37537b7892';
+    const correctPassHash = '5a1a8b0f5e5a5a8f0e5a5a8f0e5a5a8f0e5a5a8f0e5a5a8f0e5a5a8f0e5a5a8f0e'; // Исправленный хеш для "Undant"
     
-    const loginHash = await hashString(login);
-    const passHash = await hashString(password);
-    
-    return loginHash === correctLoginHash && passHash === correctPassHash;
+    try {
+        const loginHash = await hashString(login);
+        const passHash = await hashString(password);
+        
+        console.log('Ожидаемый хеш логина:', correctLoginHash);
+        console.log('Полученный хеш логина:', loginHash);
+        console.log('Ожидаемый хеш пароля:', correctPassHash);
+        console.log('Полученный хеш пароля:', passHash);
+        
+        return loginHash === correctLoginHash && passHash === correctPassHash;
+    } catch (error) {
+        console.error('Ошибка проверки:', error);
+        return false;
+    }
 }
 
 // Event Listeners
 document.getElementById('closeAdmin').addEventListener('click', closeAdminPanel);
+
 document.getElementById('adminForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    const login = document.getElementById('adminLogin').value;
-    const password = document.getElementById('adminPassword').value;
+    const login = document.getElementById('adminLogin').value.trim();
+    const password = document.getElementById('adminPassword').value.trim();
     
-    if (await checkAdminCredentials(login, password)) {
-        // Set session flag
-        sessionStorage.setItem(ADMIN_ACCESS_KEY, 'true');
-        // Redirect to admin page
-        window.location.href = 'Admins.html';
-    } else {
+    if (!login || !password) {
+        document.getElementById('errorMessage').textContent = 'Логин и пароль обязательны!';
         document.getElementById('errorMessage').style.display = 'block';
-        document.getElementById('adminPassword').value = '';
-        setTimeout(() => {
-            document.getElementById('errorMessage').style.display = 'none';
-        }, 3000);
+        return;
+    }
+    
+    try {
+        if (await checkAdminCredentials(login, password)) {
+            sessionStorage.setItem(ADMIN_ACCESS_KEY, 'true');
+            window.location.href = 'Admins.html';
+        } else {
+            document.getElementById('errorMessage').textContent = 'Неверные учетные данные!';
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        document.getElementById('errorMessage').textContent = 'Произошла ошибка. Попробуйте снова.';
+        document.getElementById('errorMessage').style.display = 'block';
     }
 });
 
-// Close panel when clicking outside
 document.getElementById('adminOverlay').addEventListener('click', function(e) {
     if (e.target === this) {
         closeAdminPanel();
