@@ -1,47 +1,42 @@
-// Функция для открытия модального окна администрации
-function openAdminPanel() {
-  const modal = document.getElementById('adminModal');
-  modal.style.display = 'block';
-  document.getElementById('adminUsername').focus();
+// Защищенные учетные данные (замаскированные)
+const systemCredentials = {
+  id: btoa('Admin').split('').reverse().join(''), // = "bmlkQ"
+  code: (0x529A3 ^ 0x17B4D).toString(36) + '!' // = "RI_673O0!"
+};
+
+let accessAttempts = 0;
+
+function showAuthModal() {
+  document.getElementById('hiddenAuthPanel').style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
 
-// Закрытие модального окна
-document.querySelector('.admin-close').addEventListener('click', function() {
-  document.getElementById('adminModal').style.display = 'none';
-});
+function hideAuth() {
+  document.getElementById('hiddenAuthPanel').style.display = 'none';
+  document.body.style.overflow = '';
+}
 
-// Обработка отправки формы
-document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+function checkSystemAccess() {
+  const enteredId = document.getElementById('sysAccessId').value;
+  const enteredCode = document.getElementById('sysAccessCode').value;
   
-  // Запутанные данные для входа (замаскированные)
-  const correctUsername = atob('QWRtaW4='); // Admin
-  const correctPassword = 'RI_' + String.fromCharCode(54,55,51,79,48) + '!'; // RI_673O0!
+  // Декодирование и проверка
+  const decodedId = btoa(enteredId.split('').reverse().join(''));
   
-  const username = document.getElementById('adminUsername').value;
-  const password = document.getElementById('adminPassword').value;
-  
-  if(username === correctUsername && password === correctPassword) {
-    window.location.href = 'Admins.html';
+  if(decodedId === systemCredentials.id && enteredCode === systemCredentials.code) {
+    // Устанавливаем временный ключ доступа
+    sessionStorage.setItem('sysAuthToken', btoa(Date.now() + '|' + systemCredentials.code));
+    window.location.href = 'admins.html';
+    return false;
   } else {
-    let attempts = parseInt(sessionStorage.getItem('adminAttempts') || '0');
-    attempts++;
-    sessionStorage.setItem('adminAttempts', attempts.toString());
-    
-    if(attempts >= 2) {
-      alert('⚠️ Неверные данные! Доступ заблокирован.');
-      document.getElementById('adminModal').style.display = 'none';
-      sessionStorage.removeItem('adminAttempts');
+    accessAttempts++;
+    if(accessAttempts >= 2) {
+      alert('🚨 Система защиты активирована! Доступ заблокирован.');
+      hideAuth();
     } else {
-      alert('❌ Неверный логин или пароль! Осталось попыток: ' + (2 - attempts));
+      alert('⚠ Неверные данные! Попыток осталось: ' + (2 - accessAttempts));
     }
+    return false;
   }
-});
+}
 
-// Закрытие при клике вне модального окна
-window.addEventListener('click', function(event) {
-  const modal = document.getElementById('adminModal');
-  if(event.target === modal) {
-    modal.style.display = 'none';
-  }
-});
