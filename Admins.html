@@ -1,1 +1,99 @@
+<!-- ВСТАВЬТЕ ЭТО ПЕРВЫМИ СТРОЧКАМИ ФАЙЛА admins.html -->
+<script>
+// 🔒 1. Проверка токена доступа
+const validateAdminToken = () => {
+  const token = sessionStorage.getItem('admToken');
+  if (!token) return false;
+  
+  // Расшифровка токена (замаскированные данные)
+  const decoded = atob(token).split('|');
+  if (decoded.length !== 3) return false;
+  
+  const [time, host, code] = decoded;
+  const isExpired = Date.now() - parseInt(time) > 3600000; // 1 час
+  const validCode = code === btoa(window.location.hostname).slice(-5) + "RI_673O0!";
+  
+  return !isExpired && validCode;
+};
 
+// 🔒 2. Проверка реферера
+const checkReferrer = () => {
+  return document.referrer.includes(window.location.origin);
+};
+
+// 🔒 3. Основная проверка
+if (!validateAdminToken() || !checkReferrer()) {
+  sessionStorage.removeItem('admToken');
+  window.location.replace('index.html?error=admin_access_denied');
+  document.write('<h1 style="color:red">Доступ запрещен</h1>'); // Fallback
+  throw new Error("Security breach");
+}
+</script>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель</title>
+  <style>
+    /* Стили защиты от скриншотов */
+    body {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      background-color: #0f0f23;
+      color: #e6e6ff;
+      font-family: 'Courier New', monospace;
+    }
+    .admin-content {
+      display: none; /* Показывается только после JS-проверок */
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-content" id="realContent">
+    <!-- Ваш контент админки здесь -->
+    <h1>Административная панель</h1>
+    
+    <button onclick="adminLogout()" style="
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    ">Выйти</button>
+  </div>
+
+  <script>
+  // 🔒 4. Активация контента после проверок
+  document.getElementById('realContent').style.display = 'block';
+  
+  // 🔒 5. Защита от копирования
+  document.addEventListener('copy', (e) => {
+    e.preventDefault();
+    alert('Копирование запрещено!');
+  });
+  
+  // 🔒 6. Выход из системы
+  function adminLogout() {
+    sessionStorage.removeItem('admToken');
+    window.location.href = 'index.html';
+  }
+  
+  // 🔒 7. Защита от iframe
+  if (window !== top) {
+    top.location.href = location.href;
+  }
+  
+  // 🔒 8. Дополнительная проверка при уходе со страницы
+  window.addEventListener('beforeunload', (e) => {
+    if (!e.target.activeElement.href) {
+      e.returnValue = 'Вы уверены, что хотите покинуть админ-панель?';
+    }
+  });
+  </script>
+</body>
+</html>
