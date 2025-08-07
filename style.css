@@ -150,3 +150,89 @@
     }
 }
 
+/* Стили админ-панели */
+.admin-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-panel {
+    background: linear-gradient(135deg, #1a3a1a, #0d250d);
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    color: #e0e0e0;
+    border: 1px solid #2d5a2d;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-admin {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    color: #a0a0a0;
+    font-size: 24px;
+    transition: color 0.2s;
+}
+
+.close-admin:hover {
+    color: #ffffff;
+}
+
+.admin-form-group {
+    margin-bottom: 20px;
+}
+
+.admin-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #a0d8a0;
+    font-weight: bold;
+}
+
+.admin-form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #2d4d2d;
+    border-radius: 8px;
+    background-color: #1e3a1e;
+    color: white;
+    font-size: 16px;
+}
+
+.admin-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: #ff6b6b;
+    text-align: center;
+    margin-top: 15px;
+    display: none;
+}
