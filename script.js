@@ -24,7 +24,7 @@ async function hashString(str) {
 async function checkAdminCredentials(login, password) {
     // Hashed credentials (SHA-256)
     const correctLoginHash = 'd82494f05d6917ba02f7aaa29689ccb444bb73f20380876cb05d1f37537b7892'; // Admin
-    const correctPassHash = 'a3d0a5a5b0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0'; // RI_673O0!
+    const correctPassHash = 'a3d0a5a5b0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0'; // Хеш от "Undant"
     
     const loginHash = await hashString(login);
     const passHash = await hashString(password);
