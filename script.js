@@ -1,4 +1,4 @@
-// Конфигурация безопасности 
+// Конфигурация безопасност
 const SECURITY_CONFIG = {
   SALT: "RZD_SECURE_SALT_" + (new Date().getFullYear()),
   TOKEN_PREFIX: "rzd_auth_v3_",
