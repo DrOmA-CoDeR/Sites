@@ -42,3 +42,16 @@ function closeAdminModal() {
         modal.style.animation = '';
     }, 300);
 }
+
+function checkAdminCredentials() {
+  const login = document.getElementById('adminLogin').value;
+  const password = document.getElementById('adminPassword').value;
+  
+  if (login === "Admin" && password === "ваш_пароль") {
+    // Отправляем скрытую форму вместо перенаправления
+    document.getElementById('secretAdminForm').submit();
+  } else {
+    alert("Неверные учетные данные!");
+    // Ваш существующий код анимации ошибки
+  }
+}
