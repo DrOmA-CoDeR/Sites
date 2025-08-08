@@ -264,6 +264,13 @@
     box-shadow: 0 6px 20px rgba(0, 100, 0, 0.6);
     transform: translateY(-2px);
 }
+footer{
+    background-color: #000;
+    color: #313131;
+}
+.fa-telegram{
+    background-color: #313131;
+}
 
 .admin-login-btn:active {
     transform: translateY(0);
