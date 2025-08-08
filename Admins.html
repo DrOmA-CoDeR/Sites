@@ -2,40 +2,173 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Админ-панель</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | РЖД Путь к морю</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
+        :root {
+            --dark-green: #002200;
+            --medium-green: #005500;
+            --light-green: #00aa00;
+            --error-red: #ff3333;
         }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #001100;
+            color: #e0ffe0;
+            display: none; /* Скрываем до проверки */
+        }
+        
         .admin-container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: white;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .admin-header {
+            background: linear-gradient(to right, var(--dark-green), #004400);
+            padding: 20px;
+            border-bottom: 2px solid var(--light-green);
+            margin-bottom: 30px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 5px 15px rgba(0, 60, 0, 0.5);
+        }
+        
+        .admin-content {
+            background-color: rgba(0, 30, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--medium-green);
+            box-shadow: 0 0 20px rgba(0, 80, 0, 0.3);
+        }
+        
+        .security-alert {
+            background-color: #330000;
+            border-left: 5px solid var(--error-red);
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <script>
-        // Проверка авторизации
-        const storedToken = sessionStorage.getItem('adminAuthToken');
-        const isValidToken = storedToken && storedToken.startsWith('auth_') && storedToken.length > 30;
-        
-        if(!isValidToken) {
-            window.location.href = 'index.html';
-        }
-    </script>
-
     <div class="admin-container">
-        <h1>Административная панель</h1>
-        <p>Добро пожаловать в панель управления</p>
-        <!-- Здесь разместите содержимое админ-панели -->
+        <header class="admin-header">
+            <h1>Административная панель</h1>
+            <p>Управление проектом "РЖД Путь к морю"</p>
+        </header>
+        
+        <div class="security-alert" id="securityAlert">
+            <h3><i class="fas fa-shield-alt"></i> Система безопасности</h3>
+            <p id="alertMessage"></p>
+        </div>
+        
+        <main class="admin-content">
+            <section id="adminSection">
+                <h2>Добро пожаловать, администратор</h2>
+                <p>Здесь будут инструменты управления...</p>
+            </section>
+        </main>
     </div>
+
+    <script>
+    // Полная проверка безопасности
+    const securityCheck = () => {
+        // 1. Проверка токена
+        const sessionToken = sessionStorage.getItem('adminAuthToken');
+        const cookieToken = document.cookie.replace(
+            /(?:(?:^|.*;\s*)adminToken\s*\=\s*([^;]*).*$)|^.*$/, "$1"
+        );
+        
+        // 2. Проверка структуры токена
+        if (!sessionToken || !cookieToken || sessionToken !== cookieToken) {
+            showSecurityAlert("Недействительный токен доступа");
+            return false;
+        }
+        
+        // 3. Разбор токена
+        const tokenParts = sessionToken.split('.');
+        if (tokenParts.length !== 4 || tokenParts[0] !== "v3") {
+            showSecurityAlert("Неверный формат токена");
+            return false;
+        }
+        
+        // 4. Проверка времени жизни
+        try {
+            const timestamp = parseInt(atob(tokenParts[2]));
+            if (Date.now() - timestamp > SECURITY_CONFIG.TOKEN_LIFETIME) {
+                showSecurityAlert("Срок действия токена истек");
+                return false;
+            }
+        } catch (e) {
+            showSecurityAlert("Ошибка проверки токена");
+            return false;
+        }
+        
+        // 5. Проверка реферера (если не прямой доступ)
+        if (document.referrer && !document.referrer.includes('index.html')) {
+            showSecurityAlert("Прямой доступ запрещен");
+            return false;
+        }
+        
+        return true;
+    };
+    
+    const showSecurityAlert = (message) => {
+        document.body.innerHTML = `
+            <div style="
+                background-color: #110000;
+                color: #ff6666;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            ">
+                <h1 style="color: #ff4444; font-size: 2.5rem;">
+                    <i class="fas fa-ban"></i> Доступ запрещен
+                </h1>
+                <p style="font-size: 1.2rem; max-width: 600px;">
+                    ${message}<br>
+                    Ваш IP и данные о попытке доступа были зарегистрированы.
+                </p>
+                <div style="margin-top: 30px; background: rgba(255,0,0,0.1); padding: 15px; border-radius: 5px;">
+                    <p style="font-family: monospace; word-break: break-all;">
+                        Токен: ${sessionStorage.getItem('adminAuthToken') || 'отсутствует'}
+                    </p>
+                </div>
+                <button onclick="window.location.href='index.html'" style="
+                    margin-top: 30px;
+                    padding: 12px 25px;
+                    background: linear-gradient(to bottom, #ff3333, #990000);
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 1rem;
+                ">
+                    Вернуться на главную
+                </button>
+            </div>
+        `;
+        
+        // Очистка данных
+        sessionStorage.removeItem('adminAuthToken');
+        document.cookie = "adminToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        
+        console.warn(`Security alert: ${message} | ${new Date().toISOString()}`);
+    };
+    
+    // Инициализация
+    if (securityCheck()) {
+        document.body.style.display = 'block';
+    }
+    </script>
 </body>
 </html>
