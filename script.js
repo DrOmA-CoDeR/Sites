@@ -27,7 +27,7 @@ function checkAdminCredentials() {
         // Генерируем токен доступа
         const authToken = 'auth_' + Math.random().toString(36).substr(2, 16) + sha256(Date.now().toString());
         sessionStorage.setItem('adminAuthToken', authToken);
-        window.location.href = 'admins.html';
+        window.location.href = 'Admins.html';
     } else {
         loginAttempts++;
         alert(`Неверные учетные данные! Осталось попыток: ${MAX_ATTEMPTS - loginAttempts}`);
