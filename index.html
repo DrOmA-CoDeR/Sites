@@ -104,6 +104,24 @@
         </div>
     </footer>
 
+    <!-- В вашем модальном окне замените кнопку входа на: -->
+<form id="adminLoginForm" action="Admins.html" method="get" style="display: none;">
+    <input type="hidden" name="key" value="RZD_2023_SECRET">
+</form>
+
+<script>
+function checkAdminCredentials() {
+    const login = document.getElementById('adminLogin').value;
+    const password = document.getElementById('adminPassword').value;
+    
+    if (login === "Admin" && password === "ваш_пароль") {
+        document.getElementById('adminLoginForm').submit();
+    } else {
+        alert("Неверные данные!");
+    }
+}
+</script>
+
     <!-- Модальное окно администратора -->
 <div id="adminModal" class="admin-modal">
     <button onclick="closeAdminModal()">
