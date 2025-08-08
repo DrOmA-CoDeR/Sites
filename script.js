@@ -61,7 +61,7 @@ async function checkAdminCredentials() {
         const hashedPassword = await sha256(password);
         
         // Хеш пароля "Undant1" (предварительно вычисленный)
-        const correctHashedPassword = 'a5e00132373a703c0be5b2339e5a1e8e5a801e5b5a5a5e00132373a703c0be5';
+        const correctHashedPassword = '3f06fe71cb25ecc8f6e7d14e27c1739b3090d62065b7de0a3c5d4900efe90bf5';
         
         if (login === 'Admin' && hashedPassword === correctHashedPassword) {
             // Успешная авторизация - переходим на страницу администратора
