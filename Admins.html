@@ -37,7 +37,7 @@ const referrer = document.referrer;
 const secretKey = new URLSearchParams(window.location.search).get('key');
 
 // Секретный ключ (должен совпадать с тем, что в форме)
-const validKey = "RZD_" + (new Date().getFullYear()) + "_SECRET";
+const validKey = "as" + (new Date().getFullYear()) + "_SECRET";
 
 if (referrer.includes("index.html") && secretKey === validKey) {
     // Показываем админ-панель
