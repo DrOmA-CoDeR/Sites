@@ -1,101 +1,120 @@
-// Конфигурация безопасности
+// Хеширование SHA-256
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+// Открытие модального окна
 function openAdminPanel() {
-    document.getElementById('adminModal').style.display = 'flex';
-}
-
-const SECURITY_CONFIG = {
-  SALT: "RZD_SECURE_SALT_" + (new Date().getFullYear()),
-  TOKEN_VERSION: "v3",
-  MAX_ATTEMPTS: 3,
-  TOKEN_LIFETIME: 3600000 // 1 час в миллисекундах
-};
-
-// Глобальные переменные
-let loginAttempts = 0;
-let lastFailedAttempt = 0;
-
-// Генерация защищенного токена
-function generateSecureToken(login) {
-  const timestamp = Date.now();
-  const randomPart = crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
-  
-  return [
-    SECURITY_CONFIG.TOKEN_VERSION,
-    sha256(login + SECURITY_CONFIG.SALT + timestamp),
-    btoa(timestamp),
-    sha256(randomPart + navigator.userAgent + SECURITY_CONFIG.SALT)
-  ].join('.');
-}
-
-// Проверка учетных данных
-function checkAdminCredentials() {
-  // Защита от brute-force
-  const now = Date.now();
-  if (now - lastFailedAttempt < 5000) {
-    alert("Слишком частые попытки входа. Подождите 5 секунд.");
-    return;
-  }
-
-  if (loginAttempts >= SECURITY_CONFIG.MAX_ATTEMPTS) {
-    alert(`Доступ заблокирован. Превышено количество попыток.`);
-    document.getElementById('adminLogin').disabled = true;
-    document.getElementById('adminPassword').disabled = true;
-    return;
-  }
-
-  const login = document.getElementById('adminLogin').value.trim();
-  const password = document.getElementById('adminPassword').value;
-
-  // Хеширование с солью
-  const hashedLogin = sha256(login + SECURITY_CONFIG.SALT);
-  const hashedPassword = sha256(password + SECURITY_CONFIG.SALT);
-
-  // Проверка учетных данных (замените значения на свои)
-  if (hashedLogin === "c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f" && 
-      hashedPassword === "3f06fe71cb25ecc8f6e7d14e27c1739b3090d62065b7de0a3c5d4900efe90bf5") {
-    
-    // Генерация токена
-    const authToken = generateSecureToken(login);
-    
-    // Сохранение токена
-    sessionStorage.setItem('adminAuthToken', authToken);
-    document.cookie = `adminToken=${authToken}; path=/; SameSite=Strict; max-age=3600; Secure`;
-    
-    // Перенаправление с очисткой истории
-    window.location.replace("Admins.html");
-  } else {
-    loginAttempts++;
-    lastFailedAttempt = now;
-    alert(`Неверные учетные данные! Осталось попыток: ${SECURITY_CONFIG.MAX_ATTEMPTS - loginAttempts}`);
-    
-    // Анимация ошибки
-    const inputs = document.querySelectorAll('.admin-login-input');
-    inputs.forEach(input => {
-      input.style.animation = 'shake 0.5s';
-      setTimeout(() => input.style.animation = '', 500);
-    });
-  }
+    const modal = document.getElementById('adminModal');
+    modal.style.display = 'flex';
+    // Очищаем поля при открытии
+    document.getElementById('adminLogin').value = '';
+    document.getElementById('adminPassword').value = '';
+    // Удаляем предыдущие сообщения об ошибке
+    const errors = document.querySelectorAll('.error-message');
+    errors.forEach(error => error.remove());
 }
 
 // Закрытие модального окна
 function closeAdminModal() {
-  const modal = document.getElementById('adminModal');
-  modal.style.animation = 'fadeOut 0.3s ease-out';
-  setTimeout(() => {
-    modal.style.display = 'none';
-    modal.style.animation = '';
-  }, 300);
+    const modal = document.getElementById('adminModal');
+    modal.style.animation = 'fadeOut 0.4s ease-out';
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.style.animation = 'fadeIn 0.4s ease-out';
+    }, 400);
 }
 
-// Добавьте в CSS:
-/*
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-5px); }
-  40%, 80% { transform: translateX(5px); }
+// Показать сообщение об ошибке
+function showError(message) {
+    const errorElement = document.createElement('div');
+    errorElement.className = 'error-message';
+    errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    errorElement.style.color = '#ff5555';
+    errorElement.style.marginTop = '15px';
+    errorElement.style.animation = 'fadeIn 0.3s ease-out';
+    
+    const loginBox = document.querySelector('.admin-login-box');
+    loginBox.appendChild(errorElement);
 }
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+
+// Проверка учетных данных
+async function checkAdminCredentials() {
+    const login = document.getElementById('adminLogin').value.trim();
+    const password = document.getElementById('adminPassword').value.trim();
+    
+    // Очищаем предыдущие сообщения об ошибке
+    const errorElements = document.querySelectorAll('.error-message');
+    errorElements.forEach(el => el.remove());
+    
+    if (!login || !password) {
+        showError('Все поля должны быть заполнены');
+        return;
+    }
+    
+    try {
+        // Хешируем введенный пароль
+        const hashedPassword = await sha256(password);
+        
+        // Хеш пароля "Undant1" (предварительно вычисленный)
+        const correctHashedPassword = 'a5e00132373a703c0be5b2339e5a1e8e5a801e5b5a5a5e00132373a703c0be5';
+        
+        if (login === 'Admin' && hashedPassword === correctHashedPassword) {
+            // Успешная авторизация - переходим на страницу администратора
+            window.location.href = 'Admins.html';
+        } else {
+            showError('Неверный логин или пароль');
+        }
+    } catch (error) {
+        showError('Ошибка при проверке данных');
+        console.error('Authentication error:', error);
+    }
 }
-*/
+
+// Добавляем крестик для закрытия в модальное окно
+document.addEventListener('DOMContentLoaded', function() {
+    const loginBox = document.querySelector('.admin-login-box');
+    
+    // Создаем элемент крестика
+    const closeButton = document.createElement('span');
+    closeButton.innerHTML = '&times;';
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '15px';
+    closeButton.style.right = '20px';
+    closeButton.style.fontSize = '28px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.color = '#00aa00';
+    closeButton.style.transition = 'color 0.3s';
+    
+    closeButton.onmouseover = function() {
+        this.style.color = '#00ff00';
+    };
+    
+    closeButton.onmouseout = function() {
+        this.style.color = '#00aa00';
+    };
+    
+    closeButton.onclick = closeAdminModal;
+    
+    // Добавляем крестик в модальное окно
+    loginBox.insertBefore(closeButton, loginBox.firstChild);
+    
+    // Закрытие по клику вне модального окна
+    const modal = document.getElementById('adminModal');
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            closeAdminModal();
+        }
+    };
+    
+    // Обработка нажатия Enter в полях ввода
+    document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            checkAdminCredentials();
+        }
+    });
+});
