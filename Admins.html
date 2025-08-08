@@ -3,17 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Административная панель</title>
+    <title>Админ-панель | Аутентификация</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Все предыдущие стили остаются без изменений */
-        .hidden-data {
+        /* Основные стили */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .blur-background {
+            filter: blur(8px);
+            height: 100vh;
+            transition: filter 0.7s ease;
+        }
+        
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .auth-box {
+            background: rgba(20, 20, 40, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            width: 380px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .auth-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff2a6d, #05d9e8);
+            animation: gradientFlow 6s infinite linear;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background: linear-gradient(90deg, #ff2a6d, #d300c5, #05d9e8); }
+            25% { background: linear-gradient(90deg, #d300c5, #05d9e8, #ff2a6d); }
+            50% { background: linear-gradient(90deg, #05d9e8, #ff2a6d, #d300c5); }
+            75% { background: linear-gradient(90deg, #ff2a6d, #05d9e8, #d300c5); }
+            100% { background: linear-gradient(90deg, #d300c5, #ff2a6d, #05d9e8); }
+        }
+        
+        .auth-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .auth-header h2 {
+            margin: 0;
+            font-size: 28px;
+            background: linear-gradient(to bottom, #ff2a6d, #05d9e8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 10px 0;
+        }
+        
+        .auth-header p {
+            margin: 10px 0 0;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .auth-code {
+            font-size: 42px;
+            letter-spacing: 8px;
+            margin: 30px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-code::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, 
+                          rgba(255, 42, 109, 0.3) 0%, 
+                          rgba(5, 217, 232, 0.3) 100%);
+            animation: codeGlow 4s infinite alternate;
+            z-index: -1;
+        }
+        
+        @keyframes codeGlow {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .auth-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(5, 217, 232, 0.5);
+        }
+        
+        .auth-btn {
+            background: linear-gradient(to bottom, #ff2a6d, #d300c5);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-btn:hover {
+            background: linear-gradient(to bottom, #ff2a6d, #05d9e8);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 42, 109, 0.4);
+        }
+        
+        .auth-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s;
+        }
+        
+        .auth-btn:hover::after {
+            left: 100%;
+        }
+        
+        .error-message {
+            color: #ff5555;
+            margin-top: 15px;
+            font-size: 14px;
             display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .security-warning {
+            font-size: 12px;
+            color: #666;
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+        
+        /* Анимация для кода */
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px #ff2a6d, 0 0 10px #ff2a6d; }
+            50% { text-shadow: 0 0 10px #05d9e8, 0 0 20px #05d9e8; }
+            100% { text-shadow: 0 0 5px #ff2a6d, 0 0 10px #ff2a6d; }
+        }
+        
+        .code-digit {
+            display: inline-block;
+            animation: pulse 3s infinite;
+            animation-delay: calc(var(--delay) * 0.3s);
         }
     </style>
 </head>
 <body>
-    <!-- Основное содержимое -->
+    <!-- Основное содержимое (размытое) -->
     <div class="blur-background" id="adminContent">
         <div class="admin-content">
             <h1>Административная панель</h1>
@@ -29,130 +230,101 @@
                 <p>Для доступа введите код безопасности</p>
             </div>
             
-            <div class="auth-code" id="securityCode">####</div>
+            <div class="auth-code" id="securityCode">
+                <span class="code-digit" style="--delay: 0">6</span>
+                <span class="code-digit" style="--delay: 1">7</span>
+                <span class="code-digit" style="--delay: 2">8</span>
+                <span class="code-digit" style="--delay: 3">1</span>
+            </div>
             
             <input type="text" class="auth-input" id="authCodeInput" placeholder="Введите код" maxlength="4">
-            <div class="error-message" id="errorMsg">Неверный код! Попробуйте снова.</div>
+            <div class="error-message" id="errorMsg">
+                <i class="fas fa-exclamation-circle"></i> Неверный код! Попробуйте снова.
+            </div>
             
             <button class="auth-btn" id="submitCodeBtn">
                 <i class="fas fa-unlock-alt"></i> Подтвердить
             </button>
             
             <div class="security-warning">
-                <i class="fas fa-exclamation-triangle"></i> Все действия записываются
+                <i class="fas fa-exclamation-triangle"></i> Все попытки входа регистрируются
             </div>
         </div>
     </div>
 
-    <!-- Скрытые данные с зашифрованным кодом -->
-    <div class="hidden-data" id="encryptedData">
-        <!-- Код зашифрован методом Base64 + обратный порядок -->
-        <span id="part1">MTg3</span>
-        <span id="part2">NjY=</span>
-        <span id="part3">NzY=</span>
-        <span id="part4">ODE=</span>
-    </div>
-
     <script>
-        // Функция для получения реального кода
-        function getRealCode() {
-            // Собираем части кода
-            const parts = [
-                atob(document.getElementById('part1').textContent),
-                atob(document.getElementById('part2').textContent),
-                atob(document.getElementById('part3').textContent),
-                atob(document.getElementById('part4').textContent)
-            ];
-            
-            // Обратный порядок и объединение
-            return parts.reverse().join('').substring(0, 4);
-        }
-
-        // Глобальные переменные
-        const CORRECT_CODE = getRealCode(); // Получаем реальный код
+        // Здесь тот же JavaScript код из предыдущего примера
+        // с проверкой кода и блокировкой после нескольких попыток
+        const CORRECT_CODE = "6781";
         let attempts = 0;
         const MAX_ATTEMPTS = 3;
-        const BLOCK_TIME = 300000;
-
-        // Элементы DOM
-        const authOverlay = document.getElementById('authOverlay');
-        const adminContent = document.getElementById('adminContent');
-        const authCodeInput = document.getElementById('authCodeInput');
-        const submitCodeBtn = document.getElementById('submitCodeBtn');
-        const errorMsg = document.getElementById('errorMsg');
-        const securityCode = document.getElementById('securityCode');
-
-        // Показываем "поддельный" код (маскировка)
-        function showFakeCode() {
-            const fakeCodes = ['1234', '0000', '1111', '4321', '6780'];
-            securityCode.textContent = fakeCodes[Math.floor(Math.random() * fakeCodes.length)];
-        }
+        const BLOCK_TIME = 5 * 60 * 1000; // 5 минут
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Проверяем блокировку
-            const blockUntil = localStorage.getItem('adminBlockUntil');
-            if (blockUntil && Date.now() < parseInt(blockUntil)) {
-                showBlockedMessage();
-                return;
-            }
-
-            // Показываем случайный "ложный" код
-            showFakeCode();
+            const authCodeInput = document.getElementById('authCodeInput');
+            const submitCodeBtn = document.getElementById('submitCodeBtn');
+            const errorMsg = document.getElementById('errorMsg');
             
-            // Анимация мерцания
-            setInterval(() => {
-                securityCode.style.textShadow = `0 0 ${Math.random() * 10 + 5}px rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 255, 0.7)`;
-            }, 1000);
-
+            // Фокус на поле ввода
             authCodeInput.focus();
+            
+            // Проверка кода при нажатии кнопки
+            submitCodeBtn.addEventListener('click', verifyCode);
+            
+            // Проверка кода при нажатии Enter
+            authCodeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyCode();
+                }
+            });
         });
 
-        // Обработчики событий
-        submitCodeBtn.addEventListener('click', verifyCode);
-        authCodeInput.addEventListener('keypress', (e) => e.key === 'Enter' && verifyCode());
-
-        // Функция проверки кода
         function verifyCode() {
-            const enteredCode = authCodeInput.value.trim();
-
+            const enteredCode = document.getElementById('authCodeInput').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            
             if (enteredCode === CORRECT_CODE) {
-                // Успешный вход
-                attempts = 0;
-                localStorage.removeItem('adminBlockUntil');
-                authOverlay.style.display = 'none';
-                adminContent.style.filter = 'none';
-                document.querySelector('.admin-content').style.display = 'block';
+                // Успешная аутентификация
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.filter = 'none';
             } else {
                 // Неверный код
                 attempts++;
+                errorMsg.style.display = 'block';
+                
+                // Анимация ошибки
+                document.getElementById('authCodeInput').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.getElementById('authCodeInput').style.animation = '';
+                }, 500);
                 
                 if (attempts >= MAX_ATTEMPTS) {
-                    const blockUntil = Date.now() + BLOCK_TIME;
-                    localStorage.setItem('adminBlockUntil', blockUntil);
+                    // Блокировка
                     showBlockedMessage();
-                } else {
-                    errorMsg.style.display = 'block';
-                    authCodeInput.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
-                    setTimeout(() => {
-                        errorMsg.style.display = 'none';
-                        authCodeInput.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                        showFakeCode(); // Меняем "ложный" код
-                    }, 3000);
                 }
             }
         }
 
         function showBlockedMessage() {
-            authOverlay.innerHTML = `
-                <div class="auth-box" style="text-align: center;">
-                    <h2 style="color: #ff5555;"><i class="fas fa-ban"></i> Доступ заблокирован</h2>
-                    <p>Превышено количество попыток ввода</p>
-                    <div class="auth-code" style="color: #ff5555;">
-                        <i class="fas fa-clock fa-2x"></i>
+            const authBox = document.querySelector('.auth-box');
+            authBox.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h2 style="color: #ff2a6d;"><i class="fas fa-ban"></i> Доступ заблокирован</h2>
+                    <p>Слишком много неудачных попыток</p>
+                    <div style="margin: 30px 0; font-size: 24px; color: #05d9e8;">
+                        <i class="fas fa-clock"></i>
                         <p>Попробуйте снова через 5 минут</p>
+                    </div>
+                    <div class="security-warning">
+                        <i class="fas fa-shield-alt"></i> Система безопасности активирована
                     </div>
                 </div>
             `;
+            
+            // Блокировка на 5 минут
+            setTimeout(() => {
+                location.reload();
+            }, BLOCK_TIME);
         }
     </script>
 </body>
