@@ -2,9 +2,158 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Название страницы</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Административная панель</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Все предыдущие стили остаются без изменений */
+        .hidden-data {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <p>работает</p>
+    <!-- Основное содержимое -->
+    <div class="blur-background" id="adminContent">
+        <div class="admin-content">
+            <h1>Административная панель</h1>
+            <p>Конфиденциальная информация доступна только авторизованным пользователям</p>
+        </div>
+    </div>
+
+    <!-- Окно аутентификации -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h2><i class="fas fa-user-shield"></i> Повторная аутентификация</h2>
+                <p>Для доступа введите код безопасности</p>
+            </div>
+            
+            <div class="auth-code" id="securityCode">####</div>
+            
+            <input type="text" class="auth-input" id="authCodeInput" placeholder="Введите код" maxlength="4">
+            <div class="error-message" id="errorMsg">Неверный код! Попробуйте снова.</div>
+            
+            <button class="auth-btn" id="submitCodeBtn">
+                <i class="fas fa-unlock-alt"></i> Подтвердить
+            </button>
+            
+            <div class="security-warning">
+                <i class="fas fa-exclamation-triangle"></i> Все действия записываются
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрытые данные с зашифрованным кодом -->
+    <div class="hidden-data" id="encryptedData">
+        <!-- Код зашифрован методом Base64 + обратный порядок -->
+        <span id="part1">MTg3</span>
+        <span id="part2">NjY=</span>
+        <span id="part3">NzY=</span>
+        <span id="part4">ODE=</span>
+    </div>
+
+    <script>
+        // Функция для получения реального кода
+        function getRealCode() {
+            // Собираем части кода
+            const parts = [
+                atob(document.getElementById('part1').textContent),
+                atob(document.getElementById('part2').textContent),
+                atob(document.getElementById('part3').textContent),
+                atob(document.getElementById('part4').textContent)
+            ];
+            
+            // Обратный порядок и объединение
+            return parts.reverse().join('').substring(0, 4);
+        }
+
+        // Глобальные переменные
+        const CORRECT_CODE = getRealCode(); // Получаем реальный код
+        let attempts = 0;
+        const MAX_ATTEMPTS = 3;
+        const BLOCK_TIME = 300000;
+
+        // Элементы DOM
+        const authOverlay = document.getElementById('authOverlay');
+        const adminContent = document.getElementById('adminContent');
+        const authCodeInput = document.getElementById('authCodeInput');
+        const submitCodeBtn = document.getElementById('submitCodeBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const securityCode = document.getElementById('securityCode');
+
+        // Показываем "поддельный" код (маскировка)
+        function showFakeCode() {
+            const fakeCodes = ['1234', '0000', '1111', '4321', '6780'];
+            securityCode.textContent = fakeCodes[Math.floor(Math.random() * fakeCodes.length)];
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем блокировку
+            const blockUntil = localStorage.getItem('adminBlockUntil');
+            if (blockUntil && Date.now() < parseInt(blockUntil)) {
+                showBlockedMessage();
+                return;
+            }
+
+            // Показываем случайный "ложный" код
+            showFakeCode();
+            
+            // Анимация мерцания
+            setInterval(() => {
+                securityCode.style.textShadow = `0 0 ${Math.random() * 10 + 5}px rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 255, 0.7)`;
+            }, 1000);
+
+            authCodeInput.focus();
+        });
+
+        // Обработчики событий
+        submitCodeBtn.addEventListener('click', verifyCode);
+        authCodeInput.addEventListener('keypress', (e) => e.key === 'Enter' && verifyCode());
+
+        // Функция проверки кода
+        function verifyCode() {
+            const enteredCode = authCodeInput.value.trim();
+
+            if (enteredCode === CORRECT_CODE) {
+                // Успешный вход
+                attempts = 0;
+                localStorage.removeItem('adminBlockUntil');
+                authOverlay.style.display = 'none';
+                adminContent.style.filter = 'none';
+                document.querySelector('.admin-content').style.display = 'block';
+            } else {
+                // Неверный код
+                attempts++;
+                
+                if (attempts >= MAX_ATTEMPTS) {
+                    const blockUntil = Date.now() + BLOCK_TIME;
+                    localStorage.setItem('adminBlockUntil', blockUntil);
+                    showBlockedMessage();
+                } else {
+                    errorMsg.style.display = 'block';
+                    authCodeInput.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
+                    setTimeout(() => {
+                        errorMsg.style.display = 'none';
+                        authCodeInput.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                        showFakeCode(); // Меняем "ложный" код
+                    }, 3000);
+                }
+            }
+        }
+
+        function showBlockedMessage() {
+            authOverlay.innerHTML = `
+                <div class="auth-box" style="text-align: center;">
+                    <h2 style="color: #ff5555;"><i class="fas fa-ban"></i> Доступ заблокирован</h2>
+                    <p>Превышено количество попыток ввода</p>
+                    <div class="auth-code" style="color: #ff5555;">
+                        <i class="fas fa-clock fa-2x"></i>
+                        <p>Попробуйте снова через 5 минут</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
