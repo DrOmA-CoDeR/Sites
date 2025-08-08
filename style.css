@@ -137,8 +137,10 @@
 }
 .fs{
     display: flex;
-    justify-content: center;
     gap: 50px;
+}
+.second-block{
+        justify-content: center;
 }
 .fa-bolt{
     transition: 0.5s;
