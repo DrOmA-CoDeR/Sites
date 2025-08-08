@@ -109,18 +109,6 @@
     <input type="hidden" name="key" value="RZD_2023_SECRET">
 </form>
 
-<script>
-function checkAdminCredentials() {
-    const login = document.getElementById('adminLogin').value;
-    const password = document.getElementById('adminPassword').value;
-    
-    if (login === "Admin" && password === "ваш_пароль") {
-        document.getElementById('adminLoginForm').submit();
-    } else {
-        alert("Неверные данные!");
-    }
-}
-</script>
 
     <!-- Модальное окно администратора -->
 <div id="adminModal" class="admin-modal">
@@ -150,6 +138,20 @@ function checkAdminCredentials() {
         <div class="security-info">
             <p><i class="fas fa-shield-alt"></i> Все попытки входа регистрируются</p>
         </div>
+    </div>
+</div>
+           <!-- Скрытая форма для админ-доступа -->
+<form id="secretAdminForm" action="Admins.html" method="get" style="display:none;">
+  <input type="hidden" name="secret_key" value="as">
+</form>
+
+<!-- Ваше модальное окно (оставляем без изменений) -->
+<div id="adminModal" class="admin-modal">
+    <button onclick="closeAdminModal()">
+        <i class="fa-thin fa-rectangle-xmark fa-xl" style="color: #005700;"></i>
+    </button>
+    <div class="admin-login-box">
+        <!-- ... существующая разметка ... -->
     </div>
 </div>
 
