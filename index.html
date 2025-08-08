@@ -107,10 +107,28 @@
     <!-- Модальное окно администратора -->
 <div id="adminModal" class="admin-modal">
     <div class="admin-login-box">
-        <h2>Вход для администрации</h2>
-        <input type="text" id="adminLogin" class="admin-login-input" placeholder="Логин">
-        <input type="password" id="adminPassword" class="admin-login-input" placeholder="Пароль">
-        <button onclick="checkAdminCredentials()" class="admin-login-btn">Войти</button>
+        <div class="admin-login-header">
+            <h2><i class="fas fa-lock"></i> Аутентификация</h2>
+            <p>Доступ только для авторизованного персонала</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="adminLogin"><i class="fas fa-user"></i> Логин:</label>
+            <input type="text" id="adminLogin" class="admin-login-input" placeholder="Введите логин">
+        </div>
+        
+        <div class="input-group">
+            <label for="adminPassword"><i class="fas fa-key"></i> Пароль:</label>
+            <input type="password" id="adminPassword" class="admin-login-input" placeholder="Введите пароль">
+        </div>
+        
+        <button onclick="checkAdminCredentials()" class="admin-login-btn">
+            <i class="fas fa-sign-in-alt"></i> Войти
+        </button>
+        
+        <div class="security-info">
+            <p><i class="fas fa-shield-alt"></i> Все попытки входа регистрируются</p>
+        </div>
     </div>
 </div>
 
