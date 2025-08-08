@@ -4,171 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Админ-панель | РЖД Путь к морю</title>
+    <!-- Подключаем ту же библиотеку sha256 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <style>
+        /* Стили должны быть согласованы с основной страницей */
         :root {
-            --dark-green: #002200;
-            --medium-green: #005500;
-            --light-green: #00aa00;
-            --error-red: #ff3333;
+            --dark-green: #001a00;
+            --medium-green: #004d00;
+            --accent-green: #00cc00;
+            --error-red: #cc0000;
         }
         
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #001100;
+            background-color: var(--dark-green);
             color: #e0ffe0;
             display: none; /* Скрываем до проверки */
         }
         
         .admin-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background: rgba(0, 30, 0, 0.8);
+            border-radius: 8px;
+            border: 1px solid var(--accent-green);
+            box-shadow: 0 0 15px rgba(0, 80, 0, 0.4);
         }
         
-        .admin-header {
-            background: linear-gradient(to right, var(--dark-green), #004400);
+        .access-denied {
+            background: rgba(80, 0, 0, 0.7);
+            color: #ff9999;
             padding: 20px;
-            border-bottom: 2px solid var(--light-green);
-            margin-bottom: 30px;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 5px 15px rgba(0, 60, 0, 0.5);
-        }
-        
-        .admin-content {
-            background-color: rgba(0, 30, 0, 0.7);
-            border-radius: 10px;
-            padding: 20px;
-            border: 1px solid var(--medium-green);
-            box-shadow: 0 0 20px rgba(0, 80, 0, 0.3);
-        }
-        
-        .security-alert {
-            background-color: #330000;
-            border-left: 5px solid var(--error-red);
-            padding: 15px;
-            margin-bottom: 20px;
-            display: none;
+            border-left: 4px solid var(--error-red);
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="admin-container">
-        <header class="admin-header">
-            <h1>Административная панель</h1>
-            <p>Управление проектом "РЖД Путь к морю"</p>
-        </header>
-        
-        <div class="security-alert" id="securityAlert">
-            <h3><i class="fas fa-shield-alt"></i> Система безопасности</h3>
-            <p id="alertMessage"></p>
+        <h1><i class="fas fa-user-shield"></i> Административная панель</h1>
+        <div id="adminContent">
+            <!-- Контент загрузится после успешной проверки -->
         </div>
-        
-        <main class="admin-content">
-            <section id="adminSection">
-                <h2>Добро пожаловать, администратор</h2>
-                <p>Здесь будут инструменты управления...</p>
-            </section>
-        </main>
     </div>
 
     <script>
-    // Полная проверка безопасности
-    const securityCheck = () => {
-        // 1. Проверка токена
-        const sessionToken = sessionStorage.getItem('adminAuthToken');
-        const cookieToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)adminToken\s*\=\s*([^;]*).*$)|^.*$/, "$1"
-        );
-        
-        // 2. Проверка структуры токена
-        if (!sessionToken || !cookieToken || sessionToken !== cookieToken) {
-            showSecurityAlert("Недействительный токен доступа");
-            return false;
-        }
-        
-        // 3. Разбор токена
-        const tokenParts = sessionToken.split('.');
-        if (tokenParts.length !== 4 || tokenParts[0] !== "v3") {
-            showSecurityAlert("Неверный формат токена");
-            return false;
-        }
-        
-        // 4. Проверка времени жизни
-        try {
-            const timestamp = parseInt(atob(tokenParts[2]));
-            if (Date.now() - timestamp > SECURITY_CONFIG.TOKEN_LIFETIME) {
-                showSecurityAlert("Срок действия токена истек");
-                return false;
-            }
-        } catch (e) {
-            showSecurityAlert("Ошибка проверки токена");
-            return false;
-        }
-        
-        // 5. Проверка реферера (если не прямой доступ)
-        if (document.referrer && !document.referrer.includes('index.html')) {
-            showSecurityAlert("Прямой доступ запрещен");
-            return false;
-        }
-        
-        return true;
+    // Конфигурация безопасности (ДОЛЖНА СОВПАДАТЬ с config в script.js)
+    const SECURITY = {
+        TOKEN_PREFIX: "rzd_auth_v3_",
+        SALT: "RZD_SECURE_SALT_" + new Date().getFullYear(),
+        TOKEN_LIFETIME: 3600000 // 1 час
     };
-    
-    const showSecurityAlert = (message) => {
-        document.body.innerHTML = `
-            <div style="
-                background-color: #110000;
-                color: #ff6666;
-                height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                padding: 20px;
-                font-family: Arial, sans-serif;
-            ">
-                <h1 style="color: #ff4444; font-size: 2.5rem;">
-                    <i class="fas fa-ban"></i> Доступ запрещен
-                </h1>
-                <p style="font-size: 1.2rem; max-width: 600px;">
-                    ${message}<br>
-                    Ваш IP и данные о попытке доступа были зарегистрированы.
-                </p>
-                <div style="margin-top: 30px; background: rgba(255,0,0,0.1); padding: 15px; border-radius: 5px;">
-                    <p style="font-family: monospace; word-break: break-all;">
-                        Токен: ${sessionStorage.getItem('adminAuthToken') || 'отсутствует'}
-                    </p>
+
+    // Основная функция проверки доступа
+    function verifyAccess() {
+        try {
+            // 1. Получаем токены из всех источников
+            const sessionToken = sessionStorage.getItem('adminAuthToken');
+            const cookieToken = getCookie('adminToken');
+            
+            // 2. Проверка наличия токенов
+            if (!sessionToken || !cookieToken) {
+                throw new Error("Токен доступа не найден");
+            }
+            
+            // 3. Проверка совпадения токенов
+            if (sessionToken !== cookieToken) {
+                throw new Error("Несоответствие токенов");
+            }
+            
+            // 4. Проверка префикса токена
+            if (!sessionToken.startsWith(SECURITY.TOKEN_PREFIX)) {
+                throw new Error("Неверный формат токена");
+            }
+            
+            // 5. Извлекаем время из токена
+            const tokenParts = sessionToken.split('_');
+            const tokenTime = parseInt(tokenParts[3]);
+            
+            // 6. Проверка срока действия
+            if (isNaN(tokenTime) || Date.now() - tokenTime > SECURITY.TOKEN_LIFETIME) {
+                throw new Error("Токен просрочен");
+            }
+            
+            // 7. Проверка хеша UserAgent
+            const expectedHash = sha256(navigator.userAgent + SECURITY.SALT).substr(0, 16);
+            if (tokenParts[4] !== expectedHash) {
+                throw new Error("Ошибка верификации");
+            }
+            
+            // Если все проверки пройдены
+            document.body.style.display = 'block';
+            showAdminContent();
+            
+        } catch (error) {
+            showSecurityError(error.message);
+        }
+    }
+
+    // Показать содержимое админ-панели
+    function showAdminContent() {
+        document.getElementById('adminContent').innerHTML = `
+            <div class="admin-welcome">
+                <h2>Добро пожаловать, администратор!</h2>
+                <p>Последний вход: ${new Date().toLocaleString()}</p>
+                <div class="admin-features">
+                    <h3>Доступные функции:</h3>
+                    <ul>
+                        <li>Управление пользователями</li>
+                        <li>Настройки сервера</li>
+                        <li>Просмотр статистики</li>
+                    </ul>
                 </div>
-                <button onclick="window.location.href='index.html'" style="
-                    margin-top: 30px;
-                    padding: 12px 25px;
-                    background: linear-gradient(to bottom, #ff3333, #990000);
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-size: 1rem;
-                ">
-                    Вернуться на главную
+            </div>
+        `;
+    }
+
+    // Показать ошибку безопасности
+    function showSecurityError(message) {
+        document.body.innerHTML = `
+            <div class="admin-container">
+                <div class="access-denied">
+                    <h2><i class="fas fa-ban"></i> Доступ запрещен</h2>
+                    <p><strong>Причина:</strong> ${message}</p>
+                    <p>Все попытки несанкционированного доступа регистрируются.</p>
+                </div>
+                <button onclick="window.location.href='index.html'" 
+                    style="padding: 10px 20px; background: var(--error-red); color: white; border: none; cursor: pointer;">
+                    Вернуться на сайт
                 </button>
             </div>
         `;
         
-        // Очистка данных
+        // Очищаем все следы авторизации
         sessionStorage.removeItem('adminAuthToken');
         document.cookie = "adminToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         
-        console.warn(`Security alert: ${message} | ${new Date().toISOString()}`);
-    };
-    
-    // Инициализация
-    if (securityCheck()) {
-        document.body.style.display = 'block';
+        console.error(`Security Alert: ${message} at ${new Date()}`);
     }
+
+    // Вспомогательная функция для работы с cookies
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // Запускаем проверку при загрузке страницы
+    window.onload = verifyAccess;
     </script>
 </body>
 </html>
