@@ -152,3 +152,51 @@
     }
 }
 
+/* Модальное окно администратора */
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-login-box {
+    background-color: #006400;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    color: white;
+    text-align: center;
+}
+
+.admin-login-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+    background-color: #003300;
+    color: white;
+}
+
+.admin-login-btn {
+    background-color: #004d00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.admin-login-btn:hover {
+    background-color: #008000;
+}
