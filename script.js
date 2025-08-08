@@ -78,28 +78,3 @@ function checkAdminCredentials() {
     });
   }
 }
-// Функция открытия модального окна
-function openAdminPanel() {
-  const modal = document.getElementById('adminModal');
-  modal.style.display = 'flex';
-  
-  // Добавляем обработчик закрытия по клику вне окна
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      closeAdminModal();
-    }
-  });
-    // Добавляем кнопку закрытия
-  const closeBtn = modal.querySelector('.fa-rectangle-xmark');
-  closeBtn.addEventListener('click', closeAdminModal);
-}
-
-// Функция закрытия модального окна
-function closeAdminModal() {
-  const modal = document.getElementById('adminModal');
-  modal.style.animation = 'fadeOut 0.3s ease-out';
-  setTimeout(() => {
-    modal.style.display = 'none';
-    modal.style.animation = '';
-  }, 300);
-}
