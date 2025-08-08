@@ -1,4 +1,8 @@
 // Конфигурация безопасности
+function openAdminPanel() {
+    document.getElementById('adminModal').style.display = 'flex';
+}
+
 const SECURITY_CONFIG = {
   SALT: "RZD_SECURE_SALT_" + (new Date().getFullYear()),
   TOKEN_VERSION: "v3",
