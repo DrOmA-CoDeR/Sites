@@ -28,8 +28,7 @@ function openAdminPanel() {
             <span class="close-modal" onclick="closeAdminModal()">&times;</span>
             <div class="admin-login-header">
                 <h2><i class="fas fa-lock"></i> Аутентификация</h2>
-                <p>Доступ только для авторизованного персонала</p>
-            </div>
+                <p>Доступ только для Администрации</p></div>
             
             <div class="input-group">
                 <label for="adminLogin"><i class="fas fa-user"></i> Логин:</label>
@@ -46,7 +45,7 @@ function openAdminPanel() {
             </button>
             
             <div class="security-info">
-                <p><i class="fas fa-shield-alt"></i> Все попытки входа регистрируются</p>
+                <p><i class="fas fa-shield-alt"></i> Все попытки входа регистрируются! </p>
             </div>
         </div>
     `;
@@ -70,7 +69,7 @@ function showBlockedMessage() {
         <div class="admin-login-box blocked-box">
             <div class="admin-login-header">
                 <h2><i class="fas fa-ban" style="color: #ff5555;"></i> Доступ ограничен</h2>
-                <p>Слишком много неудачных попыток входа</p>
+                <p>Слишком много неудачных попыток входа, ваш ip-адрес отправлен админитсртору. Если попытки возобновлялся вы будите заблокированы! </p>
             </div>
             
             <div class="blocked-timer">
@@ -144,5 +143,6 @@ async function checkAdminCredentials() {
         console.error('Authentication error:', error);
     }
 }
+
 
 // Остальные функции (closeAdminModal, showError) остаются без изменений
