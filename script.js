@@ -33,3 +33,13 @@ function checkAdminCredentials() {
         alert(`Неверные учетные данные! Осталось попыток: ${MAX_ATTEMPTS - loginAttempts}`);
     }
 }
+
+function closeAdminModal() {
+    const modal = document.getElementById('adminModal');
+    modal.style.animation = 'fadeOut 0.3s ease-out';
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.style.animation = '';
+    }, 300);
+}
+
