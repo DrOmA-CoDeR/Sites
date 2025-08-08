@@ -330,3 +330,42 @@
 .close-modal:hover {
     color: #00ff00;
 }
+
+/* Стили для заблокированного состояния */
+.blocked-box {
+    text-align: center;
+    padding: 40px;
+}
+
+.blocked-box h2 {
+    color: #ff5555;
+    margin-bottom: 20px;
+}
+
+.blocked-timer {
+    margin: 25px 0;
+    font-size: 18px;
+}
+
+.blocked-timer i {
+    font-size: 40px;
+    color: #ff5555;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.blocked-timer span {
+    font-weight: bold;
+    color: #00aa00;
+}
+
+/* Анимация для сообщения о блокировке */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.blocked-box {
+    animation: shake 0.5s ease-in-out;
+}
