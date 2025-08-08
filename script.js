@@ -51,8 +51,8 @@ function checkAdminCredentials() {
   const hashedPassword = sha256(password + SECURITY_CONFIG.SALT);
 
   // Проверка учетных данных (замените значения на свои)
-  if (hashedLogin === "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" && 
-      hashedPassword === "ваш_хеш_пароля") {
+  if (hashedLogin === "c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f" && 
+      hashedPassword === "3f06fe71cb25ecc8f6e7d14e27c1739b3090d62065b7de0a3c5d4900efe90bf5") {
     
     // Генерация токена
     const authToken = generateSecureToken(login);
