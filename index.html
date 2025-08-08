@@ -98,7 +98,19 @@
         </div>
     </div>
 
-    
+    <!-- Модальное окно администратора -->
+<div id="adminModal" class="admin-modal">
+    <div class="admin-login-box">
+        <h2>Вход для администрации</h2>
+        <input type="text" id="adminLogin" class="admin-login-input" placeholder="Логин">
+        <input type="password" id="adminPassword" class="admin-login-input" placeholder="Пароль">
+        <button onclick="checkAdminCredentials()" class="admin-login-btn">Войти</button>
+    </div>
+</div>
+
+<!-- Подключение SHA-256 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+
     <script src="script.js"></script>
 </body>
 
