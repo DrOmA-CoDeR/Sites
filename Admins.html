@@ -3,329 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель | Аутентификация</title>
+    <title>Админ-панель</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Основные стили */
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: #121212;
-            color: #fff;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f8ff;
+            min-height: 100vh;
+            position: relative;
             overflow: hidden;
         }
-        
-        .blur-background {
+
+        /* Блокировка контента */
+        .content-blocked {
             filter: blur(8px);
-            height: 100vh;
-            transition: filter 0.7s ease;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.4;
+            transition: all 0.5s ease;
         }
-        
-        .auth-overlay {
+
+        .admin-modal {
+            display: flex;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
+            background-color: rgba(10, 10, 30, 0.95);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.5s ease-out;
         }
-        
-        .auth-box {
-            background: rgba(20, 20, 40, 0.9);
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .admin-login-box {
+            background: linear-gradient(145deg, #0c1445, #1a0b2e);
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 12px;
             width: 380px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 30px rgba(30, 0, 60, 0.7);
+            color: #e6f7ff;
             text-align: center;
+            border: 1px solid #4a00e0;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(5px);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
         }
-        
-        .auth-box::before {
+
+        .admin-login-box:before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ff2a6d, #05d9e8);
-            animation: gradientFlow 6s infinite linear;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00dbde, #fc00ff, #00dbde);
+            z-index: -1;
+            border-radius: 14px;
+            opacity: 0.3;
         }
-        
-        @keyframes gradientFlow {
-            0% { background: linear-gradient(90deg, #ff2a6d, #d300c5, #05d9e8); }
-            25% { background: linear-gradient(90deg, #d300c5, #05d9e8, #ff2a6d); }
-            50% { background: linear-gradient(90deg, #05d9e8, #ff2a6d, #d300c5); }
-            75% { background: linear-gradient(90deg, #ff2a6d, #05d9e8, #d300c5); }
-            100% { background: linear-gradient(90deg, #d300c5, #ff2a6d, #05d9e8); }
+
+        .admin-login-box:hover {
+            transform: scale(1);
+            box-shadow: 0 15px 35px rgba(50, 0, 100, 0.8);
         }
-        
-        .auth-header {
-            margin-bottom: 30px;
+
+        .admin-login-header {
+            margin-bottom: 25px;
             position: relative;
         }
-        
-        .auth-header h2 {
-            margin: 0;
-            font-size: 28px;
-            background: linear-gradient(to bottom, #ff2a6d, #05d9e8);
+
+        .admin-login-header h2 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            padding: 10px 0;
+            text-shadow: 0 0 15px rgba(79, 172, 254, 0.4);
         }
-        
-        .auth-header p {
-            margin: 10px 0 0;
-            color: #aaa;
+
+        .admin-login-header p {
             font-size: 14px;
+            color: #a0b0ff;
         }
-        
-        .auth-code {
-            font-size: 42px;
-            letter-spacing: 8px;
-            margin: 30px 0;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .auth-code::before {
+
+        .admin-login-header:after {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, 
-                          rgba(255, 42, 109, 0.3) 0%, 
-                          rgba(5, 217, 232, 0.3) 100%);
-            animation: codeGlow 4s infinite alternate;
-            z-index: -1;
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #fc00ff, #00dbde, transparent);
+            margin: 15px auto 0;
+            border-radius: 2px;
         }
-        
-        @keyframes codeGlow {
-            0% { opacity: 0.5; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.5; }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
-        
-        .auth-input {
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #8aa2ff;
+        }
+
+        .admin-login-input {
             width: 100%;
-            padding: 15px;
-            margin: 15px 0;
-            border: none;
+            padding: 14px 18px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 18px;
-            text-align: center;
-            outline: none;
+            border: 1px solid #3a3a8c;
+            background: rgba(25, 20, 60, 0.7);
+            color: #ffffff;
+            font-size: 16px;
             transition: all 0.3s;
-            font-family: 'Courier New', monospace;
         }
-        
-        .auth-input:focus {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(5, 217, 232, 0.5);
+
+        .admin-login-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+            background: rgba(35, 30, 80, 0.8);
         }
-        
-        .auth-btn {
-            background: linear-gradient(to bottom, #ff2a6d, #d300c5);
+
+        .admin-login-btn {
+            background: linear-gradient(to right, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 14px 30px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 18px;
+            margin-top: 10px;
+            font-size: 16px;
             font-weight: bold;
-            margin-top: 20px;
-            width: 100%;
-            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.4s;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 5px 20px rgba(118, 75, 162, 0.4);
+            width: 100%;
         }
-        
-        .auth-btn:hover {
-            background: linear-gradient(to bottom, #ff2a6d, #05d9e8);
+
+        .admin-login-btn:hover {
+            background: linear-gradient(to right, #764ba2, #667eea);
+            box-shadow: 0 7px 25px rgba(102, 126, 234, 0.6);
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 42, 109, 0.4);
         }
-        
-        .auth-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(30deg);
-            transition: all 0.5s;
+
+        .admin-login-btn:active {
+            transform: translateY(0);
         }
-        
-        .auth-btn:hover::after {
-            left: 100%;
-        }
-        
-        .error-message {
-            color: #ff5555;
-            margin-top: 15px;
-            font-size: 14px;
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .security-warning {
-            font-size: 12px;
-            color: #666;
-            margin-top: 30px;
-            border-top: 1px solid #333;
+
+        .security-info {
+            margin-top: 25px;
             padding-top: 15px;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            font-size: 13px;
+            color: #8aa2ff;
         }
-        
-        /* Анимация для кода */
-        @keyframes pulse {
-            0% { text-shadow: 0 0 5px #ff2a6d, 0 0 10px #ff2a6d; }
-            50% { text-shadow: 0 0 10px #05d9e8, 0 0 20px #05d9e8; }
-            100% { text-shadow: 0 0 5px #ff2a6d, 0 0 10px #ff2a6d; }
+
+        .security-info i {
+            margin-right: 8px;
+            color: #fc00ff;
         }
-        
-        .code-digit {
-            display: inline-block;
-            animation: pulse 3s infinite;
-            animation-delay: calc(var(--delay) * 0.3s);
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 0, 85, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid #ff3860;
+            animation: fadeIn 0.3s ease-out;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .error-message i {
+            margin-right: 8px;
+            color: #ff3860;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #667eea;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+
+        .close-modal:hover {
+            color: #fc00ff;
+        }
+
+        /* Стили для заблокированного состояния */
+        .blocked-box {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .blocked-box h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ff3860);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .blocked-timer {
+            margin: 25px 0;
+            font-size: 18px;
+        }
+
+        .blocked-timer i {
+            font-size: 40px;
+            color: #ff3860;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .blocked-timer span {
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        /* Анимация для сообщения о блокировке */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .blocked-box {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Стили для контента админки */
+        .admin-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .admin-panel {
+            background: rgba(30, 30, 70, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 40, 0.5);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .admin-panel h2 {
+            color: #8aa2ff;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
         }
     </style>
 </head>
 <body>
-    <!-- Основное содержимое (размытое) -->
-    <div class="blur-background" id="adminContent">
-        <div class="admin-content">
-            <h1>Административная панель</h1>
-            <p>Конфиденциальная информация доступна только авторизованным пользователям</p>
+    <!-- Контент страницы (изначально заблокирован) -->
+    <div id="adminContent" class="admin-content content-blocked">
+        <h1><i class="fas fa-shield-alt"></i> Панель администратора</h1>
+        
+        <div class="admin-panel">
+            <h2><i class="fas fa-tachometer-alt"></i> Управление системой</h2>
+            <p>Добро пожаловать в защищенную зону администратора</p>
+            <div style="margin-top: 30px;">
+                <button class="admin-login-btn" style="width: auto; margin: 10px;">
+                    <i class="fas fa-users"></i> Управление пользователями
+                </button>
+                <button class="admin-login-btn" style="width: auto; margin: 10px; background: linear-gradient(to right, #ff6b6b, #ff3860);">
+                    <i class="fas fa-cog"></i> Настройки системы
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Окно аутентификации -->
-    <div class="auth-overlay" id="authOverlay">
-        <div class="auth-box">
-            <div class="auth-header">
-                <h2><i class="fas fa-user-shield"></i> Повторная аутентификация</h2>
-                <p>Для доступа введите код безопасности</p>
+    <!-- Модальное окно входа -->
+    <div id="adminModal" class="admin-modal">
+        <div class="admin-login-box">
+            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
+            <div class="admin-login-header">
+                <h2><i class="fas fa-lock"></i> Аутентификация</h2>
+                <p>Доступ только для администрации</p>
             </div>
             
-            <div class="auth-code" id="securityCode">
-                <span class="code-digit" style="--delay: 0">6</span>
-                <span class="code-digit" style="--delay: 1">7</span>
-                <span class="code-digit" style="--delay: 2">8</span>
-                <span class="code-digit" style="--delay: 3">1</span>
+            <div class="input-group">
+                <label for="adminKey"><i class="fas fa-key"></i> Ключ доступа:</label>
+                <input type="text" id="adminKey" class="admin-login-input" placeholder="Введите секретный ключ">
             </div>
             
-            <input type="text" class="auth-input" id="authCodeInput" placeholder="Введите код" maxlength="4">
-            <div class="error-message" id="errorMsg">
-                <i class="fas fa-exclamation-circle"></i> Неверный код! Попробуйте снова.
+            <div class="input-group">
+                <label for="adminCode"><i class="fas fa-lock"></i> Пароль безопасности:</label>
+                <input type="password" id="adminCode" class="admin-login-input" placeholder="Введите пароль">
             </div>
             
-            <button class="auth-btn" id="submitCodeBtn">
-                <i class="fas fa-unlock-alt"></i> Подтвердить
+            <button onclick="checkAdminCredentials()" class="admin-login-btn">
+                <i class="fas fa-sign-in-alt"></i> Подтвердить доступ
             </button>
             
-            <div class="security-warning">
-                <i class="fas fa-exclamation-triangle"></i> Все попытки входа регистрируются
+            <div id="errorContainer" style="min-height: 30px;"></div>
+            
+            <div class="security-info">
+                <p><i class="fas fa-shield-alt"></i> Все попытки входа регистрируются</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Здесь тот же JavaScript код из предыдущего примера
-        // с проверкой кода и блокировкой после нескольких попыток
-        const CORRECT_CODE = "6781";
-        let attempts = 0;
+        // Глобальные переменные для контроля доступа
+        let failedAttempts = 0;
         const MAX_ATTEMPTS = 3;
-        const BLOCK_TIME = 5 * 60 * 1000; // 5 минут
+        const BLOCK_TIME_MS = 3 * 60 * 1000; // 3 минуты блокировки
+        const CORRECT_KEY = "RZD-02";
+        const CORRECT_CODE = "93692";
 
+        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            const authCodeInput = document.getElementById('authCodeInput');
-            const submitCodeBtn = document.getElementById('submitCodeBtn');
-            const errorMsg = document.getElementById('errorMsg');
+            // Показываем модальное окно при загрузке
+            document.getElementById('adminModal').style.display = 'flex';
             
-            // Фокус на поле ввода
-            authCodeInput.focus();
-            
-            // Проверка кода при нажатии кнопки
-            submitCodeBtn.addEventListener('click', verifyCode);
-            
-            // Проверка кода при нажатии Enter
-            authCodeInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    verifyCode();
-                }
+            // Добавляем обработчик события для поля ввода пароля
+            document.getElementById('adminCode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkAdminCredentials();
             });
         });
 
-        function verifyCode() {
-            const enteredCode = document.getElementById('authCodeInput').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
+        // Показать сообщение об ошибке
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
             
-            if (enteredCode === CORRECT_CODE) {
+            // Автоматическое скрытие через 3 секунды
+            setTimeout(() => {
+                errorContainer.innerHTML = '';
+            }, 3000);
+        }
+
+        // Закрытие модального окна
+        function closeAdminModal() {
+            // Не разрешаем закрывать модальное окно
+            showError("Для доступа необходимо пройти аутентификацию");
+        }
+
+        // Проверка учетных данных
+        function checkAdminCredentials() {
+            const key = document.getElementById('adminKey').value.trim();
+            const code = document.getElementById('adminCode').value.trim();
+            
+            // Очищаем предыдущие сообщения об ошибке
+            document.getElementById('errorContainer').innerHTML = '';
+            
+            if (!key || !code) {
+                showError("Оба поля должны быть заполнены");
+                return;
+            }
+            
+            if (key === CORRECT_KEY && code === CORRECT_CODE) {
                 // Успешная аутентификация
-                document.getElementById('authOverlay').style.display = 'none';
-                document.getElementById('adminContent').style.filter = 'none';
+                document.getElementById('adminModal').style.display = 'none';
+                document.getElementById('adminContent').classList.remove('content-blocked');
+                
+                // Записываем факт входа в localStorage
+                localStorage.setItem('adminAuthenticated', 'true');
             } else {
-                // Неверный код
-                attempts++;
-                errorMsg.style.display = 'block';
+                failedAttempts++;
                 
-                // Анимация ошибки
-                document.getElementById('authCodeInput').style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    document.getElementById('authCodeInput').style.animation = '';
-                }, 500);
-                
-                if (attempts >= MAX_ATTEMPTS) {
-                    // Блокировка
+                if (failedAttempts >= MAX_ATTEMPTS) {
+                    // Блокировка доступа
+                    const blockTime = Date.now() + BLOCK_TIME_MS;
+                    localStorage.setItem('blockUntil', blockTime);
                     showBlockedMessage();
+                } else {
+                    showError(`Неверный ключ или пароль. Осталось попыток: ${MAX_ATTEMPTS - failedAttempts}`);
                 }
             }
         }
 
+        // Показать сообщение о блокировке
         function showBlockedMessage() {
-            const authBox = document.querySelector('.auth-box');
-            authBox.innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <h2 style="color: #ff2a6d;"><i class="fas fa-ban"></i> Доступ заблокирован</h2>
-                    <p>Слишком много неудачных попыток</p>
-                    <div style="margin: 30px 0; font-size: 24px; color: #05d9e8;">
-                        <i class="fas fa-clock"></i>
-                        <p>Попробуйте снова через 5 минут</p>
+            const modal = document.getElementById('adminModal');
+            const blockTime = parseInt(localStorage.getItem('blockUntil'));
+            const remainingTime = Math.max(0, blockTime - Date.now());
+            const minutes = Math.ceil(remainingTime / (60 * 1000));
+            
+            modal.innerHTML = `
+                <div class="admin-login-box blocked-box">
+                    <div class="admin-login-header">
+                        <h2><i class="fas fa-ban"></i> Доступ ограничен</h2>
+                        <p>Слишком много неудачных попыток входа</p>
                     </div>
-                    <div class="security-warning">
-                        <i class="fas fa-shield-alt"></i> Система безопасности активирована
+                    
+                    <div class="blocked-timer">
+                        <i class="fas fa-clock"></i>
+                        <p>Попробуйте снова через: <span id="timer">${minutes}</span> мин.</p>
+                    </div>
+                    
+                    <div class="security-info">
+                        <p><i class="fas fa-shield-alt"></i> Система безопасности активирована</p>
                     </div>
                 </div>
             `;
             
-            // Блокировка на 5 минут
-            setTimeout(() => {
-                location.reload();
-            }, BLOCK_TIME);
+            // Обновляем таймер каждую минуту
+            const timerElement = document.getElementById('timer');
+            const timerInterval = setInterval(() => {
+                const remaining = Math.max(0, blockTime - Date.now());
+                const mins = Math.ceil(remaining / (60 * 1000));
+                timerElement.textContent = mins;
+                
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    location.reload(); // Перезагружаем страницу
+                }
+            }, 60000);
         }
+
+        // Проверка аутентификации при загрузке страницы
+        window.onload = function() {
+            const isAuthenticated = localStorage.getItem('adminAuthenticated') === 'true';
+            
+            if (isAuthenticated) {
+                document.getElementById('adminModal').style.display = 'none';
+                document.getElementById('adminContent').classList.remove('content-blocked');
+            } else {
+                document.getElementById('adminModal').style.display = 'flex';
+            }
+            
+            // Проверка блокировки
+            const storedBlockUntil = localStorage.getItem('blockUntil');
+            if (storedBlockUntil && Date.now() < parseInt(storedBlockUntil)) {
+                showBlockedMessage();
+            }
+        };
     </script>
 </body>
 </html>
