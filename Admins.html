@@ -544,6 +544,9 @@
                 await checkForBlock();
             }
         }
+     
+            blockUser("RZD-05", true); // Перманентная блокировка
+            blockIP("192.168.1.101", false); // Временная блокировка
 
         // Показать админ-панель
         function showAdminPage() {
