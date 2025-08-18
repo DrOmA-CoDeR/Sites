@@ -104,6 +104,145 @@
     <div id="adminPage">
         <!-- ... -->
     </div>
+
+      <script>
+        // Конфигурация системы (добавляем параметры блокировки)
+        const SECURITY_CONFIG = {
+            correctLogin: "RZD-02",
+            correctPassword: "2202020",
+            maxAttempts: 3,
+            tempBlockTime: 60 * 60 * 1000, // 1 час
+            permBlockAfter: 5, // После 5 блокировок - перманентная
+            blockedUsers: ["RZD-01", "RZD-03"], // Список заблокированных пользователей
+            blockedIPs: ["192.168.1.100", "10.0.0.15"] // Список заблокированных IP
+        };
+
+        // При загрузке страницы сразу проверяем блокировку
+        document.addEventListener('DOMContentLoaded', async function() {
+            initParticles();
+            
+            // Проверяем блокировку по IP
+            const clientIP = await getClientIP();
+            if (SECURITY_CONFIG.blockedIPs.includes(clientIP)) {
+                showLockScreen("Ваш IP адрес заблокирован", null, true);
+                return;
+            }
+            
+            // Проверяем блокировку по пользователю (если уже авторизован)
+            if (sessionStorage.getItem('authToken')) {
+                const login = sessionStorage.getItem('userLogin');
+                if (SECURITY_CONFIG.blockedUsers.includes(login)) {
+                    showLockScreen("Ваш аккаунт заблокирован", null, true);
+                    return;
+                }
+                showAdminPage();
+            } else {
+                // Проверяем временную блокировку
+                await checkBlockStatus();
+            }
+            
+            // Остальной код инициализации...
+        });
+
+        // Функция показа экрана блокировки
+        function showLockScreen(reason, expires = null, isPermanent = false) {
+            const lockScreen = document.getElementById('lockScreen');
+            const lockReason = document.getElementById('lockReason');
+            const unlockTimer = document.getElementById('unlockTimer');
+            
+            // Показываем причину
+            lockReason.textContent = reason;
+            
+            // Для временной блокировки показываем таймер
+            if (expires && !isPermanent) {
+                const updateTimer = () => {
+                    const now = Date.now();
+                    if (now >= expires) {
+                        location.reload();
+                        return;
+                    }
+                    
+                    const diff = expires - now;
+                    const minutes = Math.floor(diff / 60000);
+                    const seconds = Math.floor((diff % 60000) / 1000);
+                    
+                    unlockTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                };
+                
+                updateTimer();
+                setInterval(updateTimer, 1000);
+            } else if (isPermanent) {
+                unlockTimer.textContent = "НИКОГДА";
+            } else {
+                unlockTimer.textContent = "НЕИЗВЕСТНО";
+            }
+            
+            // Показываем экран блокировки и скрываем другие элементы
+            lockScreen.style.display = "flex";
+            document.getElementById('loginPage').style.display = "none";
+            document.getElementById('adminPage').style.display = "none";
+        }
+
+        // Модифицированная функция проверки блокировки
+        async function checkBlockStatus() {
+            const securityData = await getSecurityData();
+            const userFingerprint = await getFingerprint();
+
+            // Проверка перманентной блокировки
+            if (securityData.permBlocks.includes(userFingerprint)) {
+                showLockScreen("Ваш аккаунт заблокирован навсегда", null, true);
+                return true;
+            }
+
+            // Проверка временной блокировки
+            const userBlocks = securityData.blocks.filter(b =>
+                b.fingerprint === userFingerprint &&
+                b.expires > Date.now()
+            );
+
+            if (userBlocks.length > 0) {
+                const block = userBlocks[0];
+                showLockScreen("Слишком много неудачных попыток входа", block.expires);
+                return true;
+            }
+
+            return false;
+        }
+
+        // Функция блокировки пользователя (для админки)
+        async function blockUser(login, permanent = false) {
+            if (!SECURITY_CONFIG.blockedUsers.includes(login)) {
+                SECURITY_CONFIG.blockedUsers.push(login);
+                
+                // Если пользователь онлайн, немедленно блокируем
+                if (sessionStorage.getItem('userLogin') === login) {
+                    showLockScreen("Ваш аккаунт был заблокирован администратором", null, permanent);
+                }
+                
+                return true;
+            }
+            return false;
+        }
+
+        // Функция блокировки IP (для админки)
+        async function blockIP(ip, permanent = false) {
+            if (!SECURITY_CONFIG.blockedIPs.includes(ip)) {
+                SECURITY_CONFIG.blockedIPs.push(ip);
+                
+                // Если IP совпадает с текущим, немедленно блокируем
+                const currentIP = await getClientIP();
+                if (currentIP === ip) {
+                    showLockScreen("Ваш IP адрес был заблокирован администратором", null, permanent);
+                }
+                
+                return true;
+            }
+            return false;
+        }
+
+        // Остальные функции остаются без изменений
+        // ...
+    </script> 
     
     <div class="fullscreen-image">
         <div class="image-content">
