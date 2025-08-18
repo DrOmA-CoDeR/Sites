@@ -125,7 +125,7 @@ async function checkAdminCredentials() {
             // Сброс счетчика при успешном входе
             failedAttempts = 0;
             localStorage.removeItem('blockUntil');
-            window.location.href = 'login.html';
+            window.location.href = 'Admins.html';
         } else {
             failedAttempts++;
             
