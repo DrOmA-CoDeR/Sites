@@ -83,11 +83,28 @@
             color: #44ff44;
             font-weight: bold;
         }
-        
+
     </style>  
 </head>
 
 <body>
+
+      <!-- Экран блокировки (изначально скрыт) -->
+    <div id="lockScreen" class="lock-screen" style="display: none;">
+        <h2><i class="fas fa-lock"></i> ДОСТУП ЗАБЛОКИРОВАН</h2>
+        <p id="lockReason">Причина блокировки не указана</p>
+        <p>До разблокировки осталось: <span id="unlockTimer" class="unlock-time">--:--</span></p>
+    </div>
+
+    <!-- Ваш существующий HTML код остается без изменений -->
+    <div id="loginPage">
+        <!-- ... -->
+    </div>
+
+    <div id="adminPage">
+        <!-- ... -->
+    </div>
+    
     <div class="fullscreen-image">
         <div class="image-content">
             <h1>РЖД ПУТЬ К МОРЮ</h1>
