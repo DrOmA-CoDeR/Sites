@@ -146,3 +146,44 @@ async function checkAdminCredentials() {
 
 
 // Остальные функции (closeAdminModal, showError) остаются без изменений
+
+// Проверка статуса блокировки
+async function checkBlockStatus() {
+    const securityData = await getSecurityData();
+    const userFingerprint = await getFingerprint();
+
+    // Проверка перманентной блокировки
+    if (securityData.permBlocks.includes(userFingerprint)) {
+        showBlock("Ваш аккаунт заблокирован навсегда");
+        return true;
+    }
+
+    // Проверка временной блокировки
+    const userBlocks = securityData.blocks.filter(b =>
+        b.fingerprint === userFingerprint &&
+        b.expires > Date.now()
+    );
+
+    if (userBlocks.length > 0) {
+        const block = userBlocks[0];
+        const timeLeft = Math.ceil((block.expires - Date.now()) / (60 * 1000));
+        showBlock(`Временная блокировка (осталось ${timeLeft} мин.)`, block.expires);
+        return true;
+    }
+
+    // Проверка блокировки по IP (новый код)
+    const clientIp = await getClientIP();
+    const ipBlocks = securityData.blocks.filter(b =>
+        b.ip === clientIp &&
+        b.expires > Date.now()
+    );
+
+    if (ipBlocks.length > 0) {
+        const block = ipBlocks[0];
+        const timeLeft = Math.ceil((block.expires - Date.now()) / (60 * 1000));
+        showBlock(`Ваш IP заблокирован (осталось ${timeLeft} мин.)`, block.expires);
+        return true;
+    }
+
+    return false;
+}
