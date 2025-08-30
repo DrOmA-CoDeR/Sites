@@ -1,154 +1,184 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
-*{
+
+* {
     font-family: "Jura", sans-serif;
 }
-@keyframes telegram{
-    0%{
+
+@keyframes telegram {
+    0% {
         transform: scale(1);
     }
-    50%{
+
+    50% {
         transform: scale(1.2);
     }
-    90%{
+
+    90% {
         transform: scale(1);
     }
-    100%{
+
+    100% {
         transform: scale(1);
     }
 }
+
 @keyframes playnow {
-    0%{
+    0% {
         transform: rotate(0deg);
         transform: scale(1);
     }
-    20%{
+
+    20% {
         transform: rotate(15deg);
         transform: scale(1.3);
     }
-    40%{
+
+    40% {
         transform: rotate(-15deg);
         transform: scale(0.7);
     }
-    60%{
+
+    60% {
         transform: rotate(15deg);
         transform: scale(1.3);
     }
-    80%{
+
+    80% {
         transform: rotate(-15deg);
         transform: scale(0.7);
     }
-    100%{
+
+    100% {
         transform: rotate(0deg);
         transform: scale(1);
     }
 }
-       * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            overflow-x: hidden;
-        }
-        
-        .fullscreen-image {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            background-image: url('Airbrush-OBJECT-REMOVER-1754241840490.png');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            overflow: hidden;
-        }
-        
-        .fullscreen-image::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(to bottom, transparent, #ffffff);
-        }
-        
-        .image-content {
-            max-width: 800px;
-            padding: 20px;
-            z-index: 1;
-        }
-        
-        .image-content h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .image-content p {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: rgba(255, 255, 255, 0.3);
-            color: white;
-            text-decoration: none;
-            border: 2px solid white;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-        
-        .btn:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .second-block {
-            padding: 100px 20px;
-            background-color: #ffffff;
-            color: #333;
-            text-align: center;
-        }
-        
-        .second-block h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-        }
-        
-        .second-block p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            line-height: 1.6;
-        }
-.fa-link{
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.fullscreen-image {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-image: url('Airbrush-OBJECT-REMOVER-1754241840490.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+.fullscreen-image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.image-content {
+    max-width: 800px;
+    padding: 20px;
+    z-index: 1;
+}
+
+.image-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.image-content p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    text-decoration: none;
+    border: 2px solid white;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.second-block {
+    padding: 100px 20px;
+    background-color: #ffffff;
+    color: #333;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.second-block h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.second-block p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+}
+
+.fa-link {
     transition: 0.5s;
     animation: telegram 4s infinite;
     font-size: 100px;
 }
-.fs{
+
+.fs {
     display: flex;
     gap: 50px;
 }
-.second-block{
-        justify-content: center;
+
+.second-block {
+    justify-content: center;
 }
-.fa-bolt{
+
+.fa-bolt {
     transition: 0.5s;
     animation: playnow 8s infinite;
 }
-@media (max-width: 768px){
-    .image-content{
+
+@media (max-width: 768px) {
+    .image-content {
         font-size: small;
+    }
+}
+@media (max-width: 768px) {
+    .second-block {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
     }
 }
 
@@ -169,8 +199,13 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .admin-login-box {
@@ -264,14 +299,17 @@
     box-shadow: 0 6px 20px rgba(0, 100, 0, 0.6);
     transform: translateY(-2px);
 }
-.fot{
+
+.fot {
     background-color: #000;
     color: #313131;
 }
-.cardfot{
+
+.cardfot {
     display: flex;
 }
-.fa-telegram{
+
+.fa-telegram {
     background-color: #313131;
 }
 
@@ -296,11 +334,16 @@
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
-    
+
 .error-message {
     color: #ff5555;
     margin-top: 15px;
@@ -313,8 +356,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .close-modal {
@@ -361,9 +411,26 @@
 
 /* Анимация для сообщения о блокировке */
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
 }
 
 .blocked-box {
