@@ -424,3 +424,250 @@ body {
 .blocked-box {
     animation: shake 0.5s ease-in-out;
 }
+/* Адаптация для мобильных устройств */
+@media (max-width: 1200px) {
+    .image-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .image-content p {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .image-content h1 {
+        font-size: 2.2rem;
+    }
+    
+    .image-content p {
+        font-size: 1.1rem;
+    }
+    
+    .second-block h2 {
+        font-size: 2rem;
+    }
+    
+    .second-block p {
+        font-size: 1.1rem;
+    }
+    
+    .fs {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .fa-link, .fa-bolt {
+        font-size: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .fullscreen-image {
+        height: 80vh;
+    }
+    
+    .image-content h1 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    
+    .image-content p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+    
+    .second-block {
+        padding: 60px 20px;
+    }
+    
+    .second-block h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .second-block p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    .fa-link, .fa-bolt {
+        font-size: 60px;
+    }
+    
+    /* Адаптация модального окна */
+    .admin-modal {
+        padding: 20px;
+    }
+    
+    .admin-login-box {
+        width: 90%;
+        max-width: 350px;
+        padding: 30px 20px;
+    }
+    
+    .admin-login-box h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .admin-login-input {
+        padding: 10px 12px;
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    
+    .admin-login-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .close-modal {
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .fullscreen-image {
+        height: 70vh;
+    }
+    
+    .image-content {
+        padding: 15px;
+    }
+    
+    .image-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .image-content p {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .second-block {
+        padding: 40px 15px;
+    }
+    
+    .second-block h2 {
+        font-size: 1.5rem;
+    }
+    
+    .second-block p {
+        font-size: 0.9rem;
+    }
+    
+    .fa-link, .fa-bolt {
+        font-size: 50px;
+    }
+    
+    /* Мобильная адаптация модального окна */
+    .admin-login-box {
+        width: 95%;
+        padding: 25px 15px;
+    }
+    
+    .admin-login-box h2 {
+        font-size: 18px;
+    }
+    
+    .admin-login-input {
+        font-size: 13px;
+    }
+    
+    .admin-login-btn {
+        font-size: 13px;
+    }
+    
+    .error-message {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .image-content h1 {
+        font-size: 1.3rem;
+    }
+    
+    .image-content p {
+        font-size: 0.8rem;
+    }
+    
+    .second-block h2 {
+        font-size: 1.3rem;
+    }
+    
+    .fa-link, .fa-bolt {
+        font-size: 40px;
+    }
+    
+    .admin-login-box {
+        padding: 20px 12px;
+    }
+    
+    .admin-login-box h2 {
+        font-size: 16px;
+    }
+}
+
+/* Адаптация для landscape ориентации на мобильных */
+@media (max-height: 600px) and (orientation: landscape) {
+    .fullscreen-image {
+        height: auto;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+    
+    .image-content {
+        margin: 20px 0;
+    }
+    
+    .admin-modal {
+        align-items: flex-start;
+        padding-top: 20px;
+        overflow-y: auto;
+    }
+}
+
+/* Адаптация для очень высоких экранов */
+@media (min-height: 1200px) {
+    .fullscreen-image {
+        height: 80vh;
+    }
+}
+
+/* Адаптация для темной темы */
+@media (prefers-color-scheme: dark) {
+    .fullscreen-image::after {
+        background: linear-gradient(to bottom, transparent, #1a1a1a);
+    }
+    
+    .second-block {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+}
+
+/* Адаптация для уменьшенного движения */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .fa-link, .fa-bolt {
+        animation: none;
+    }
+}
