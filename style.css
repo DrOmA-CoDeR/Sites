@@ -129,12 +129,7 @@ body {
     background-color: #ffffff;
     color: #333;
     text-align: center;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+
 }
 
 .second-block h2 {
@@ -172,13 +167,6 @@ body {
 @media (max-width: 768px) {
     .image-content {
         font-size: small;
-    }
-}
-@media (max-width: 768px) {
-    .second-block {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 15px;
     }
 }
 
@@ -436,3 +424,388 @@ body {
 .blocked-box {
     animation: shake 0.5s ease-in-out;
 }
+
+/* === MOBILE ADAPTATION (added) === */
+
+/* Пользователь предпочитает уменьшенное движение — отключаем анимации и переходы */
+@media (prefers-reduced-motion: reduce) {
+
+    .fa-link,
+    .fa-bolt,
+    .admin-login-box,
+    .btn,
+    .fullscreen-image,
+    .admin-modal {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Смартфоны — узкие экраны */
+@media (max-width: 480px) {
+
+    /* Фоновая секция: меньше по высоте, чтобы не занимать весь экран в портретной ориентации */
+    .fullscreen-image {
+        height: 70vh;
+        background-position: center top;
+    }
+
+    .fullscreen-image::after {
+        height: 60px;
+    }
+
+    /* Контент поверх изображения */
+    .image-content {
+        max-width: 96%;
+        padding: 14px;
+        z-index: 1;
+    }
+
+    .image-content h1 {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .image-content p {
+        font-size: 1rem;
+        margin-bottom: 14px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.45);
+    }
+
+    .btn {
+        padding: 10px 18px;
+        font-size: 1rem;
+        border-radius: 22px;
+        backdrop-filter: none;
+        /* производительность на слабых устройствах */
+    }
+
+    /* Секция под героем */
+    .second-block {
+        padding: 60px 12px;
+    }
+
+    .second-block h2 {
+        font-size: 1.6rem;
+        margin-bottom: 18px;
+    }
+
+    .second-block p {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 18px;
+        padding: 0 8px;
+    }
+
+    /* Иконки и флекс блоки */
+    .fs {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+    }
+
+    .fa-link {
+        font-size: 64px;
+        animation-duration: 3.5s;
+    }
+
+    .fa-bolt {
+        font-size: 64px;
+        animation-duration: 6s;
+    }
+
+    /* Модалка администратора */
+    .admin-modal {
+        align-items: flex-start;
+        padding-top: 36px;
+        backdrop-filter: none;
+        /* лучше для мобильных */
+        background-color: rgba(0, 20, 0, 0.98);
+    }
+
+    .admin-login-box {
+        width: 94%;
+        max-width: 420px;
+        padding: 20px;
+        border-radius: 10px;
+        transform: none;
+        box-shadow: 0 8px 24px rgba(0, 18, 0, 0.6);
+    }
+
+    .admin-login-box:before {
+        opacity: 0.18;
+    }
+
+    .admin-login-box h2 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    /* Универсальные поля и кнопки внутри модалки (если такие есть) */
+    .admin-login-box input,
+    .admin-login-box textarea,
+    .admin-login-box select,
+    .admin-login-box button {
+        width: 100%;
+        padding: 11px 12px;
+        font-size: 1rem;
+        border-radius: 8px;
+        margin-top: 10px;
+        box-sizing: border-box;
+    }
+
+    /* Уменьшаем hover/scale-поведение для удобства на touch */
+    .admin-login-box:hover {
+        transform: none;
+        box-shadow: 0 10px 26px rgba(0, 18, 0, 0.55);
+    }
+}
+
+/* Небольшие планшеты / большие телефоны */
+@media (min-width: 481px) and (max-width: 768px) {
+    .fullscreen-image {
+        height: 85vh;
+    }
+
+    .image-content {
+        max-width: 88%;
+        padding: 18px;
+    }
+
+    .image-content h1 {
+        font-size: 2rem;
+    }
+
+    .image-content p {
+        font-size: 1.1rem;
+    }
+
+    .btn {
+        padding: 11px 22px;
+        font-size: 1.05rem;
+    }
+
+    .second-block {
+        padding: 80px 18px;
+    }
+
+    .second-block h2 {
+        font-size: 2rem;
+    }
+
+    .second-block p {
+        font-size: 1.12rem;
+        max-width: 760px;
+    }
+
+    .fs {
+        gap: 28px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .fa-link,
+    .fa-bolt {
+        font-size: 80px;
+    }
+
+    .admin-login-box {
+        width: 380px;
+        padding: 22px;
+    }
+}
+
+/* Дополнительно: уменьшение интенсивности анимаций на мобильных для плавности */
+@media (max-width: 768px) {
+
+    .fa-link,
+    .fa-bolt {
+        animation-timing-function: ease-in-out;
+    }
+
+    /* Отключаем backdrop-filter на слабых мобильных для производительности */
+    .fullscreen-image,
+    .admin-modal {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+}
+
+/* === END MOBILE ADAPTATION (added) === */
+/* === MOBILE ADAPTATION FOR ADMIN LOGIN & BLOCKED BOX (added) === */
+
+/* Respect user reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+    .admin-login-btn,
+    .admin-login-input,
+    .admin-login-box,
+    .blocked-box,
+    .error-message,
+    .close-modal {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .admin-login-btn:after {
+        display: none !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    /* Заголовок модалки */
+    .admin-login-box h2 {
+        margin-bottom: 16px;
+        font-size: 18px;
+        text-shadow: 0 0 6px rgba(0, 255, 0, 0.25);
+    }
+
+    .admin-login-box h2:after {
+        width: 40px;
+        margin-top: 8px;
+    }
+
+    /* Поля ввода */
+    .admin-login-input {
+        padding: 12px 14px;
+        margin: 10px 0;
+        font-size: 15px;
+        border-radius: 8px;
+        background-color: rgba(0, 30, 0, 0.6);
+    }
+
+    .admin-login-input:focus {
+        box-shadow: 0 0 0 2px rgba(0, 160, 0, 0.25);
+        background-color: rgba(0, 50, 0, 0.75);
+    }
+
+    /* Кнопка — увеличить зону нажатия, убрать сложные эффекты */
+    .admin-login-btn {
+        padding: 14px 18px;
+        font-size: 15px;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(0, 60, 0, 0.45);
+    }
+
+    /* Упростить псевдоэффект на кнопке для мобильных */
+    .admin-login-btn:after {
+        display: none;
+    }
+
+    .admin-login-btn:hover {
+        transform: none;
+        box-shadow: 0 6px 18px rgba(0, 70, 0, 0.5);
+    }
+
+    /* Close icon — поближе к краю и чуть меньше */
+    .close-modal {
+        top: 12px;
+        right: 14px;
+        font-size: 24px;
+    }
+
+    .close-modal:hover {
+        color: #00ff00;
+    }
+
+    /* Ошибки и таймеры — компактнее */
+    .error-message {
+        font-size: 13px;
+        margin-top: 12px;
+    }
+
+    .blocked-box {
+        padding: 20px;
+        text-align: center;
+        animation: none;
+        /* чтобы не дергалось на мобильных */
+    }
+
+    .blocked-box h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .blocked-timer {
+        margin: 12px 0;
+        font-size: 16px;
+    }
+
+    .blocked-timer i {
+        font-size: 34px;
+    }
+
+    .blocked-timer span {
+        font-weight: 700;
+        color: #00aa00;
+    }
+
+    /* Футер/карточки/иконки */
+    .cardfot {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .fot {
+        padding: 12px;
+    }
+
+    .fa-telegram {
+        background-color: #313131;
+        width: 44px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+    }
+}
+
+/* Small tablets / large phones */
+@media (min-width: 481px) and (max-width: 768px) {
+    .admin-login-box h2 {
+        font-size: 20px;
+        margin-bottom: 18px;
+    }
+
+    .admin-login-input {
+        font-size: 15.5px;
+        padding: 12px 15px;
+        border-radius: 8px;
+    }
+
+    .admin-login-btn {
+        font-size: 15.5px;
+        padding: 13px 20px;
+        border-radius: 8px;
+    }
+
+    .admin-login-btn:after {
+        /* уменьшить размер и смягчить движение */
+        top: -40%;
+        left: -50%;
+        width: 160%;
+        height: 160%;
+        opacity: 0.08;
+        transition: left 0.35s ease;
+    }
+
+    .blocked-box {
+        animation-duration: 0.6s;
+    }
+}
+
+/* General improvements: avoid duplicate .blocked-box rules causing conflicts */
+@media (max-width: 768px) {
+
+    /* Ensure blocked-box uses single well-defined animation behaviour on mobile */
+    .blocked-box {
+        animation-name: none;
+    }
+}
+
+/* === END MOBILE ADAPTATION FOR ADMIN LOGIN & BLOCKED BOX (added) === */
