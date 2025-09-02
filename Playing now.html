@@ -3,750 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Играть сейчас</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #f0f8ff;
-            min-height: 100vh;
-            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
-
-        /* Блокировка контента */
-        .content-blocked {
-            filter: blur(8px);
-            pointer-events: none;
-            user-select: none;
-            opacity: 0.4;
-            transition: all 0.5s ease;
-        }
-
-        .admin-modal {
-            display: flex;
-            position: fixed;
+        
+        .background {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(10, 10, 30, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(8px);
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .admin-login-box {
-            background: linear-gradient(145deg, #0c1445, #1a0b2e);
-            padding: 40px;
-            border-radius: 12px;
-            width: 380px;
-            box-shadow: 0 10px 30px rgba(30, 0, 60, 0.7);
-            color: #e6f7ff;
-            text-align: center;
-            border: 1px solid #4a00e0;
-            position: relative;
-            overflow: hidden;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-        }
-
-        .admin-login-box:before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #00dbde, #fc00ff, #00dbde);
+            background-image: url('Game.png');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.7);
             z-index: -1;
-            border-radius: 14px;
-            opacity: 0.3;
         }
-
-        .admin-login-box:hover {
-            transform: scale(1);
-            box-shadow: 0 15px 35px rgba(50, 0, 100, 0.8);
-        }
-
-        .admin-login-header {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .admin-login-header h2 {
-            font-size: 26px;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px rgba(79, 172, 254, 0.4);
-        }
-
-        .admin-login-header p {
-            font-size: 14px;
-            color: #a0b0ff;
-        }
-
-        .admin-login-header:after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(to right, transparent, #fc00ff, #00dbde, transparent);
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #8aa2ff;
-        }
-
-        .admin-login-input {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 8px;
-            border: 1px solid #3a3a8c;
-            background: rgba(25, 20, 60, 0.7);
-            color: #ffffff;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .admin-login-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-            background: rgba(35, 30, 80, 0.8);
-        }
-
-        .admin-login-btn {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(118, 75, 162, 0.4);
-            width: 100%;
-        }
-
-        .admin-login-btn:hover {
-            background: linear-gradient(to right, #764ba2, #667eea);
-            box-shadow: 0 7px 25px rgba(102, 126, 234, 0.6);
-            transform: translateY(-3px);
-        }
-
-        .admin-login-btn:active {
-            transform: translateY(0);
-        }
-
-        .security-info {
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(100, 100, 255, 0.2);
-            font-size: 13px;
-            color: #8aa2ff;
-        }
-
-        .security-info i {
-            margin-right: 8px;
-            color: #fc00ff;
-        }
-
-        .error-message {
-            color: #ff6b6b;
-            margin-top: 15px;
-            padding: 12px;
-            background: rgba(255, 0, 85, 0.1);
-            border-radius: 6px;
-            border-left: 3px solid #ff3860;
-            animation: fadeIn 0.3s ease-out;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .error-message i {
-            margin-right: 8px;
-            color: #ff3860;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #667eea;
-            transition: color 0.3s;
-            z-index: 10;
-        }
-
-        .close-modal:hover {
-            color: #fc00ff;
-        }
-
-        /* Стили для заблокированного состояния */
-        .blocked-box {
+        
+        .container {
             text-align: center;
-            padding: 40px;
-        }
-
-        .blocked-box h2 {
-            color: #ff6b6b;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff6b6b, #ff3860);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .blocked-timer {
-            margin: 25px 0;
-            font-size: 18px;
-        }
-
-        .blocked-timer i {
-            font-size: 40px;
-            color: #ff3860;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .blocked-timer span {
-            font-weight: bold;
-            color: #4facfe;
-        }
-
-        /* Анимация для сообщения о блокировке */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        .blocked-box {
-            animation: shake 0.5s ease-in-out;
-        }
-
-        /* Стили для контента админки */
-        .admin-content {
             padding: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
-
-        .admin-panel {
-            background: rgba(30, 30, 70, 0.6);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 40, 0.5);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-        }
-
-        .admin-panel h2 {
-            color: #8aa2ff;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
-        }
-
-        /* Стили для таблицы попыток входа */
-        .login-attempts-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: rgba(25, 25, 60, 0.7);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .login-attempts-table th, .login-attempts-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
-        }
-
-        .login-attempts-table th {
-            background: rgba(70, 70, 150, 0.5);
-            color: #a0b0ff;
-            font-weight: 600;
-        }
-
-        .login-attempts-table tr:hover {
-            background: rgba(50, 50, 120, 0.5);
-        }
-
-        .block-ip-btn {
-            background: linear-gradient(to right, #ff6b6b, #ff3860);
+        
+        h1 {
             color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
-
-        .block-ip-btn:hover {
-            background: linear-gradient(to right, #ff3860, #ff6b6b);
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
-        }
-
-        .tab-container {
+        
+        .buttons {
             display: flex;
-            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 20px;
         }
-
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            color: #8aa2ff;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .tab.active {
-            color: #4facfe;
-            border-bottom: 3px solid #4facfe;
-            font-weight: bold;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Стили для списка заблокированных IP */
-        .blocked-ip-list {
-            margin-top: 20px;
-            background: rgba(25, 25, 60, 0.7);
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .blocked-ip-item {
+        
+        .btn {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
-        }
-
-        .unblock-ip-btn {
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            color: white;
+            justify-content: center;
+            padding: 15px 30px;
             border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            width: 300px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
-        .unblock-ip-btn:hover {
-            background: linear-gradient(to right, #00f2fe, #4facfe);
-            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .play-btn {
+            background-color: #ff0000; /* Красный цвет Roblox */
+            color: white;
+        }
+        
+        .rules-btn {
+            background-color: #0088cc; /* Голубой цвет Telegram */
+            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Контент страницы (изначально заблокирован) -->
-    <div id="adminContent" class="admin-content content-blocked">
-        <h1><i class="fas fa-shield-alt"></i> Панель администратора</h1>
+    <div class="background"></div>
+    
+    <div class="container">
+        <h1>Играть сейчас</h1>
         
-        <div class="admin-panel">
-            <div class="tab-container">
-                <div class="tab active" onclick="switchTab('dashboard')">Панель управления</div>
-                <div class="tab" onclick="switchTab('loginAttempts')">Попытки входа</div>
-                <div class="tab" onclick="switchTab('blockedIps')">Заблокированные IP</div>
-            </div>
+        <div class="buttons">
+            <a href="#" class="btn play-btn">
+                <span class="btn-icon">🎮</span>
+                Играть сейчас
+            </a>
             
-            <div id="dashboard" class="tab-content active">
-                <h2><i class="fas fa-tachometer-alt"></i> Управление системой</h2>
-                <p>Добро пожаловать в защищенную зону администратора</p>
-                <div style="margin-top: 30px;">
-                    <button class="admin-login-btn" style="width: auto; margin: 10px;">
-                        <i class="fas fa-users"></i> Управление пользователями
-                    </button>
-                    <button class="admin-login-btn" style="width: auto; margin: 10px; background: linear-gradient(to right, #ff6b6b, #ff3860);">
-                        <i class="fas fa-cog"></i> Настройки системы
-                    </button>
-                </div>
-            </div>
-            
-            <div id="loginAttempts" class="tab-content">
-                <h2><i class="fas fa-history"></i> Попытки входа</h2>
-                <p>Список всех попыток входа в систему</p>
-                <table class="login-attempts-table">
-                    <thead>
-                        <tr>
-                            <th>Дата и время</th>
-                            <th>IP-адрес</th>
-                            <th>Статус</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody id="attemptsTableBody">
-                        <!-- Попытки входа будут добавлены здесь -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <div id="blockedIps" class="tab-content">
-                <h2><i class="fas fa-ban"></i> Заблокированные IP-адреса</h2>
-                <p>Список заблокированных IP-адресов</p>
-                <div class="blocked-ip-list" id="blockedIpsList">
-                    <!-- Заблокированные IP будут добавлены здесь -->
-                </div>
-            </div>
+            <a href="#" class="btn rules-btn">
+                <span class="btn-icon">📋</span>
+                Правила сервера
+            </a>
         </div>
     </div>
-
-    <!-- Модальное окно входа -->
-    <div id="adminModal" class="admin-modal">
-        <div class="admin-login-box">
-            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
-            <div class="admin-login-header">
-                <h2><i class="fas fa-lock"></i> Аутентификация</h2>
-                <p>Доступ только для администрации</p>
-            </div>
-            
-            <div class="input-group">
-                <label for="adminKey"><i class="fas fa-key"></i> Ключ доступа:</label>
-                <input type="text" id="adminKey" class="admin-login-input" placeholder="Введите секретный ключ">
-            </div>
-            
-            <div class="input-group">
-                <label for="adminCode"><i class="fas fa-lock"></i> Пароль безопасности:</label>
-                <input type="password" id="adminCode" class="admin-login-input" placeholder="Введите пароль">
-            </div>
-            
-            <button onclick="checkAdminCredentials()" class="admin-login-btn">
-                <i class="fas fa-sign-in-alt"></i> Подтвердить доступ
-            </button>
-            
-            <div id="errorContainer" style="min-height: 30px;"></div>
-            
-            <div class="security-info">
-                <p><i class="fas fa-shield-alt"></i> Все попытки входа регистрируются</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Глобальные переменные для контроля доступа
-        let failedAttempts = 0;
-        const MAX_ATTEMPTS = 3;
-        const BLOCK_TIME_MS = 3 * 60 * 1000; // 3 минуты блокировки
-        const CORRECT_KEY = "RZD-02";
-        const CORRECT_CODE = "93692";
-        
-        // Хранилище для попыток входа и заблокированных IP
-        let loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || [];
-        let blockedIps = JSON.parse(localStorage.getItem('blockedIps')) || [];
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Показываем модальное окно при загрузке
-            document.getElementById('adminModal').style.display = 'flex';
-            
-            // Добавляем обработчик события для поля ввода пароля
-            document.getElementById('adminCode').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') checkAdminCredentials();
-            });
-            
-            // Загружаем данные о попытках входа и заблокированных IP
-            updateLoginAttemptsTable();
-            updateBlockedIpsList();
-        });
-
-        // Показать сообщение об ошибке
-        function showError(message) {
-            const errorContainer = document.getElementById('errorContainer');
-            errorContainer.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
-            
-            // Автоматическое скрытие через 3 секунды
-            setTimeout(() => {
-                errorContainer.innerHTML = '';
-            }, 3000);
-        }
-
-        // Закрытие модального окна
-        function closeAdminModal() {
-            // Не разрешаем закрывать модальное окно
-            showError("Для доступа необходимо пройти аутентификацию");
-        }
-
-        // Проверка учетных данных
-        function checkAdminCredentials() {
-            const key = document.getElementById('adminKey').value.trim();
-            const code = document.getElementById('adminCode').value.trim();
-            
-            // Очищаем предыдущие сообщения об ошибке
-            document.getElementById('errorContainer').innerHTML = '';
-            
-            if (!key || !code) {
-                showError("Оба поля должны быть заполнены");
-                return;
-            }
-            
-            // Получаем IP пользователя (эмуляция, в реальности нужно использовать серверный код)
-            const userIp = getUserIP() || 'unknown';
-            
-            if (key === CORRECT_KEY && code === CORRECT_CODE) {
-                // Успешная аутентификация
-                document.getElementById('adminModal').style.display = 'none';
-                document.getElementById('adminContent').classList.remove('content-blocked');
-                
-                // Записываем факт входа в localStorage
-                localStorage.setItem('adminAuthenticated', 'true');
-                
-                // Записываем успешную попытку входа
-                addLoginAttempt(userIp, true);
-            } else {
-                failedAttempts++;
-                
-                // Записываем неудачную попытку входа
-                addLoginAttempt(userIp, false);
-                
-                if (failedAttempts >= MAX_ATTEMPTS) {
-                    // Блокировка доступа
-                    const blockTime = Date.now() + BLOCK_TIME_MS;
-                    localStorage.setItem('blockUntil', blockTime);
-                    
-                    // Блокируем IP
-                    if (!blockedIps.includes(userIp)) {
-                        blockedIps.push(userIp);
-                        localStorage.setItem('blockedIps', JSON.stringify(blockedIps));
-                        updateBlockedIpsList();
-                    }
-                    
-                    showBlockedMessage();
-                } else {
-                    showError(`Неверный ключ или пароль. Осталось попыток: ${MAX_ATTEMPTS - failedAttempts}`);
-                }
-            }
-        }
-
-        // Добавление попытки входа
-        function addLoginAttempt(ip, isSuccess) {
-            const attempt = {
-                timestamp: new Date().toISOString(),
-                ip: ip,
-                status: isSuccess ? 'Успешно' : 'Неудачно'
-            };
-            
-            loginAttempts.unshift(attempt); // Добавляем в начало массива
-            if (loginAttempts.length > 50) loginAttempts.pop(); // Ограничиваем историю
-            
-            localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
-            updateLoginAttemptsTable();
-        }
-
-        // Обновление таблицы попыток входа
-        function updateLoginAttemptsTable() {
-            const tbody = document.getElementById('attemptsTableBody');
-            tbody.innerHTML = '';
-            
-            loginAttempts.forEach(attempt => {
-                const row = document.createElement('tr');
-                
-                const dateCell = document.createElement('td');
-                dateCell.textContent = new Date(attempt.timestamp).toLocaleString();
-                
-                const ipCell = document.createElement('td');
-                ipCell.textContent = attempt.ip;
-                
-                const statusCell = document.createElement('td');
-                statusCell.textContent = attempt.status;
-                statusCell.style.color = attempt.status === 'Успешно' ? '#4facfe' : '#ff6b6b';
-                
-                const actionCell = document.createElement('td');
-                if (attempt.status !== 'Успешно' && !blockedIps.includes(attempt.ip)) {
-                    const blockBtn = document.createElement('button');
-                    blockBtn.className = 'block-ip-btn';
-                    blockBtn.textContent = 'Заблокировать';
-                    blockBtn.onclick = () => blockIp(attempt.ip);
-                    actionCell.appendChild(blockBtn);
-                } else if (blockedIps.includes(attempt.ip)) {
-                    actionCell.textContent = 'Заблокирован';
-                }
-                
-                row.appendChild(dateCell);
-                row.appendChild(ipCell);
-                row.appendChild(statusCell);
-                row.appendChild(actionCell);
-                
-                tbody.appendChild(row);
-            });
-        }
-
-        // Блокировка IP
-        function blockIp(ip) {
-            if (!blockedIps.includes(ip)) {
-                blockedIps.push(ip);
-                localStorage.setItem('blockedIps', JSON.stringify(blockedIps));
-                updateLoginAttemptsTable();
-                updateBlockedIpsList();
-            }
-        }
-
-        // Разблокировка IP
-        function unblockIp(ip) {
-            blockedIps = blockedIps.filter(item => item !== ip);
-            localStorage.setItem('blockedIps', JSON.stringify(blockedIps));
-            updateLoginAttemptsTable();
-            updateBlockedIpsList();
-        }
-
-        // Обновление списка заблокированных IP
-        function updateBlockedIpsList() {
-            const list = document.getElementById('blockedIpsList');
-            list.innerHTML = '';
-            
-            if (blockedIps.length === 0) {
-                list.innerHTML = '<p>Нет заблокированных IP-адресов</p>';
-                return;
-            }
-            
-            blockedIps.forEach(ip => {
-                const item = document.createElement('div');
-                item.className = 'blocked-ip-item';
-                
-                const ipSpan = document.createElement('span');
-                ipSpan.textContent = ip;
-                
-                const unblockBtn = document.createElement('button');
-                unblockBtn.className = 'unblock-ip-btn';
-                unblockBtn.textContent = 'Разблокировать';
-                unblockBtn.onclick = () => unblockIp(ip);
-                
-                item.appendChild(ipSpan);
-                item.appendChild(unblockBtn);
-                
-                list.appendChild(item);
-            });
-        }
-
-        
-        function getUserIP() {
-          
-            const fakeIps = ['192.168.1.1', '10.0.0.1', '172.16.0.1', '85.234.123.45'];
-            return fakeIps[Math.floor(Math.random() * fakeIps.length)];
-        }
-
-        // Показать сообщение о блокировке
-        function showBlockedMessage() {
-            const modal = document.getElementById('adminModal');
-            const blockTime = parseInt(localStorage.getItem('blockUntil'));
-            const remainingTime = Math.max(0, blockTime - Date.now());
-            const minutes = Math.ceil(remainingTime / (60 * 1000));
-            
-            modal.innerHTML = `
-                <div class="admin-login-box blocked-box">
-                    <div class="admin-login-header">
-                        <h2><i class="fas fa-ban"></i> Доступ ограничен</h2>
-                        <p>Слишком много неудачных попыток входа</p>
-                    </div>
-                    
-                    <div class="blocked-timer">
-                        <i class="fas fa-clock"></i>
-                        <p>Попробуйте снова через: <span id="timer">${minutes}</span> мин.</p>
-                    </div>
-                    
-                    <div class="security-info">
-                        <p><i class="fas fa-shield-alt"></i> Система безопасности активирована</p>
-                    </div>
-                </div>
-            `;
-            
-            // Обновляем таймер каждую минуту
-            const timerElement = document.getElementById('timer');
-            const timerInterval = setInterval(() => {
-                const remaining = Math.max(0, blockTime - Date.now());
-                const mins = Math.ceil(remaining / (60 * 1000));
-                timerElement.textContent = mins;
-                
-                if (remaining <= 0) {
-                    clearInterval(timerInterval);
-                    location.reload(); // Перезагружаем страницу
-                }
-            }, 60000);
-        }
-
-        // Проверка аутентификации при загрузке страницы
-        window.onload = function() {
-            const isAuthenticated = localStorage.getItem('adminAuthenticated') === 'true';
-            
-            if (isAuthenticated) {
-                document.getElementById('adminModal').style.display = 'none';
-                document.getElementById('adminContent').classList.remove('content-blocked');
-            } else {
-                document.getElementById('adminModal').style.display = 'flex';
-            }
-            
-            // Проверка блокировки
-            const storedBlockUntil = localStorage.getItem('blockUntil');
-            if (storedBlockUntil && Date.now() < parseInt(storedBlockUntil)) {
-                showBlockedMessage();
-            }
-        };
-
-        // Переключение между вкладками
-        function switchTab(tabId) {
-            // Скрываем все вкладки
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Показываем выбранную вкладку
-            document.getElementById(tabId).classList.add('active');
-            
-            // Обновляем активную вкладку в меню
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            event.currentTarget.classList.add('active');
-        }
-    </script>
 </body>
 </html>
+        
